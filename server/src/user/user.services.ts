@@ -5,6 +5,7 @@ import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UserResponseInterface } from './types/userResponse.interface';
 import { sign } from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -22,13 +23,14 @@ export class UserService {
   }
 
   generateJwt(user: UserEntity): string {
+    const configService = new ConfigService();
     return sign(
       {
         id: user.id,
         username: user.username,
         email: user.email,
       },
-      'superdupersecret',
+      configService.get<string>('JWTSECRET'),
     );
   }
 
