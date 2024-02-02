@@ -38,6 +38,10 @@ export class UserService {
       );
     }
 
+    if (createUserDto.password.length < 8) {
+      throw new HttpException('Password too short', HttpStatus.BAD_REQUEST);
+    }
+
     const newUser = new UserEntity();
 
     Object.assign(newUser, createUserDto);
@@ -84,6 +88,10 @@ export class UserService {
         token: this.generateJwt(user),
       },
     };
+  }
+
+  async getUserById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async getAllUsers() {
