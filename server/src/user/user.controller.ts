@@ -33,7 +33,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   async updateUser(@User('id') currentUserId: number, @Body('user') updateUserDto: UpdateUserDto) {
     const user = await this.userService.updateUser(currentUserId, updateUserDto);
-    return await this.userService.buildUserResponse(user);
+    return this.userService.buildUserResponse(user);
   }
 
   @Post('login')
