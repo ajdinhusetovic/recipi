@@ -8,6 +8,14 @@ import { CreateRecipeDto } from './dto/CreateRecipeDto';
 export class RecipeService {
   constructor(@InjectRepository(RecipeEntity) private readonly recipeRepository: Repository<RecipeEntity>) {}
 
+  async getAllRecipes() {
+    const recipes = await this.recipeRepository.find();
+
+    const recipeCount = recipes.length;
+
+    return { results: recipeCount, recipes };
+  }
+
   async createRecipe(createRecipeDto: CreateRecipeDto): Promise<RecipeEntity> {
     const newRecipe = new RecipeEntity();
 

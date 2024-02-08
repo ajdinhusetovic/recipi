@@ -8,8 +8,8 @@ import { RecipeEntity } from './recipe.entity';
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
   @Get()
-  async getRecipe() {
-    return 'foo';
+  async getAllRecipes() {
+    return this.recipeService.getAllRecipes();
   }
 
   @Post()
