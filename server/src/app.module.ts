@@ -7,13 +7,10 @@ import { UserModule } from './user/user.module';
 import 'dotenv/config';
 import { ConfigModule } from '@nestjs/config';
 import { AuthMiddleware } from './user/middleware/auth.middleware';
+import { RecipeModule } from './recipe/recipe.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(ormconfig),
-    UserModule,
-  ],
+  imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(ormconfig), UserModule, RecipeModule],
   controllers: [AppController],
   providers: [AppService],
 })
