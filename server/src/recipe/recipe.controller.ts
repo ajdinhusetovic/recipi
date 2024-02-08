@@ -3,6 +3,7 @@ import { CreateRecipeDto } from './dto/CreateRecipeDto';
 import { AuthGuard } from '../user/guards/auth.guard';
 import { RecipeService } from './recipe.service';
 import { RecipeEntity } from './recipe.entity';
+import { User } from '../user/decorators/user.decorator';
 
 @Controller('recipes')
 export class RecipeController {
@@ -15,7 +16,10 @@ export class RecipeController {
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
-  async createRecipe(@Body('recipe') createRecipeDto: CreateRecipeDto): Promise<RecipeEntity> {
-    return await this.recipeService.createRecipe(createRecipeDto);
+  async createRecipe(
+    @User('id') currentUserId: number,
+    @Body('recipe') createRecipeDto: CreateRecipeDto,
+  ): Promise<RecipeEntity> {
+    return await this.recipeService.createRecipe(currentUserId, createRecipeDto);
   }
 }

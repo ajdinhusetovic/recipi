@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from 'typeorm';
 import { hash } from 'bcrypt';
+import { RecipeEntity } from '../recipe/recipe.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -20,6 +21,9 @@ export class UserEntity {
 
   @Column({ default: '' })
   image: string;
+
+  @OneToMany(() => RecipeEntity, (recipe) => recipe.user)
+  recipes: RecipeEntity[];
 
   @BeforeInsert()
   async hashPassword() {

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 
 @Entity({ name: 'recipes' })
 export class RecipeEntity {
@@ -22,4 +23,7 @@ export class RecipeEntity {
 
   @Column({ default: '' })
   image: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.recipes)
+  user: UserEntity;
 }
