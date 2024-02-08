@@ -14,12 +14,12 @@ export class RecipeEntity {
   @Column()
   instructions: string;
 
-  @Column()
+  @Column({ default: '' })
   videoLink: string;
 
-  @Column()
+  @Column({ default: '' })
   recipeArea: string;
 
-  @Column()
+  @Column({ default: '' })
   image: string;
 }
