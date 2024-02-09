@@ -32,4 +32,18 @@ export class RecipeService {
     const recipe = this.recipeRepository.create({ ...newRecipe, user });
     return await this.recipeRepository.save(recipe);
   }
+
+  async deleteRecipe(currentUserId: number, title: string) {
+    const recipe = await this.recipeRepository.findOne({ where: { name: title } });
+
+    if (!recipe) {
+      throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
+    }
+
+    if (recipe.user.id !== currentUserId) {
+      throw new HttpException('You are not the owner of this recipe', HttpStatus.FORBIDDEN);
+    }
+
+    return await this.recipeRepository.delete(recipe.id);
+  }
 }

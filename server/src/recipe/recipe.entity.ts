@@ -24,6 +24,6 @@ export class RecipeEntity {
   @Column({ default: '' })
   image: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.recipes)
+  @ManyToOne(() => UserEntity, (user) => user.recipes, { eager: true })
   user: UserEntity;
 }
