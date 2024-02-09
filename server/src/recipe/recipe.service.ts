@@ -4,6 +4,7 @@ import { RecipeEntity } from './recipe.entity';
 import { Repository } from 'typeorm';
 import { CreateRecipeDto } from './dto/CreateRecipeDto';
 import { UserEntity } from '../user/user.entity';
+import { UpdateRecipeDto } from './dto/UpdateRecipeDto';
 
 @Injectable()
 export class RecipeService {
@@ -45,5 +46,21 @@ export class RecipeService {
     }
 
     return await this.recipeRepository.delete(recipe.id);
+  }
+
+  async updateRecipe(currentUserId: number, title: string, updateRecipeDto: UpdateRecipeDto) {
+    const recipe = await this.recipeRepository.findOne({ where: { name: title } });
+
+    if (!recipe) {
+      throw new HttpException('No recipe found', HttpStatus.NOT_FOUND);
+    }
+
+    if (recipe.user.id !== currentUserId) {
+      throw new HttpException('You are not the recipe owner', HttpStatus.FORBIDDEN);
+    }
+
+    Object.assign(recipe, updateRecipeDto);
+
+    return await this.recipeRepository.save(recipe);
   }
 }
