@@ -43,20 +43,20 @@ export class RecipeController {
     return await this.recipeService.createRecipe(currentUserId, createRecipeDto, file.originalname, file.buffer);
   }
 
-  @Delete(':title')
+  @Delete(':slug')
   @UseGuards(AuthGuard)
-  async deleteRecipe(@User('id') currentUserId: number, @Param('title') title: string) {
-    return this.recipeService.deleteRecipe(currentUserId, title);
+  async deleteRecipe(@User('id') currentUserId: number, @Param('slug') slug: string) {
+    return this.recipeService.deleteRecipe(currentUserId, slug);
   }
 
-  @Put(':title')
+  @Put(':slug')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   async updateRecipe(
     @User('id') currentUserId: number,
     @Body('recipe') updateRecipeDto: UpdateRecipeDto,
-    @Param('title') title: string,
+    @Param('slug') slug: string,
   ) {
-    return await this.recipeService.updateRecipe(currentUserId, title, updateRecipeDto);
+    return await this.recipeService.updateRecipe(currentUserId, slug, updateRecipeDto);
   }
 }

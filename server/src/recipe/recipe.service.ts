@@ -7,6 +7,7 @@ import { CreateRecipeDto } from './dto/CreateRecipeDto';
 import { UserEntity } from '../user/user.entity';
 import { UpdateRecipeDto } from './dto/UpdateRecipeDto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import slugify from 'slugify';
 
 @Injectable()
 export class RecipeService {
@@ -46,11 +47,13 @@ export class RecipeService {
       image: `https://recipiebucket.s3.amazonaws.com/${fileName}`,
     });
 
+    recipe.slug = slugify(recipe.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+
     return await this.recipeRepository.save(recipe);
   }
 
-  async deleteRecipe(currentUserId: number, title: string) {
-    const recipe = await this.recipeRepository.findOne({ where: { name: title } });
+  async deleteRecipe(currentUserId: number, slug: string) {
+    const recipe = await this.recipeRepository.findOne({ where: { slug } });
 
     if (!recipe) {
       throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
@@ -68,11 +71,11 @@ export class RecipeService {
 
     await this.s3Client.send(new DeleteObjectCommand({ Bucket: 'recipiebucket', Key: objectKey }));
 
-    return await this.recipeRepository.delete(recipe.id);
+    return await this.recipeRepository.delete({ slug });
   }
 
-  async updateRecipe(currentUserId: number, title: string, updateRecipeDto: UpdateRecipeDto) {
-    const recipe = await this.recipeRepository.findOne({ where: { name: title } });
+  async updateRecipe(currentUserId: number, slug: string, updateRecipeDto: UpdateRecipeDto) {
+    const recipe = await this.recipeRepository.findOne({ where: { slug } });
 
     if (!recipe) {
       throw new HttpException('No recipe found', HttpStatus.NOT_FOUND);
@@ -83,6 +86,8 @@ export class RecipeService {
     }
 
     Object.assign(recipe, updateRecipeDto);
+
+    recipe.slug = slugify(recipe.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
 
     return await this.recipeRepository.save(recipe);
   }

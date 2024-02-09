@@ -7,6 +7,9 @@ export class RecipeEntity {
   id: number;
 
   @Column()
+  slug: string;
+
+  @Column()
   name: string;
 
   @Column('simple-array')
