@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RecipeEntity } from './recipe.entity';
@@ -5,9 +6,11 @@ import { Repository } from 'typeorm';
 import { CreateRecipeDto } from './dto/CreateRecipeDto';
 import { UserEntity } from '../user/user.entity';
 import { UpdateRecipeDto } from './dto/UpdateRecipeDto';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class RecipeService {
+  private readonly s3Client = new S3Client({ region: process.env.AWS_S3_REGION });
   constructor(
     @InjectRepository(RecipeEntity) private readonly recipeRepository: Repository<RecipeEntity>,
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
@@ -21,7 +24,12 @@ export class RecipeService {
     return { results: recipeCount, recipes };
   }
 
-  async createRecipe(currentUserId: number, createRecipeDto: CreateRecipeDto): Promise<RecipeEntity> {
+  async createRecipe(
+    currentUserId: number,
+    createRecipeDto: CreateRecipeDto,
+    fileName: string,
+    file: Buffer,
+  ): Promise<RecipeEntity> {
     const user = await this.userRepository.findOne({ where: { id: currentUserId } });
 
     if (!user) {
@@ -30,7 +38,14 @@ export class RecipeService {
 
     const newRecipe = { ...createRecipeDto };
 
-    const recipe = this.recipeRepository.create({ ...newRecipe, user });
+    await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipiebucket', Key: fileName, Body: file }));
+
+    const recipe = this.recipeRepository.create({
+      ...newRecipe,
+      user,
+      image: `https://recipiebucket.s3.amazonaws.com/${fileName}`,
+    });
+
     return await this.recipeRepository.save(recipe);
   }
 
@@ -44,6 +59,14 @@ export class RecipeService {
     if (recipe.user.id !== currentUserId) {
       throw new HttpException('You are not the owner of this recipe', HttpStatus.FORBIDDEN);
     }
+
+    const url = recipe.image;
+
+    const urlParts = url.split('/');
+    const objectKey = urlParts.slice(3).join('/');
+    console.log(objectKey);
+
+    await this.s3Client.send(new DeleteObjectCommand({ Bucket: 'recipiebucket', Key: objectKey }));
 
     return await this.recipeRepository.delete(recipe.id);
   }
