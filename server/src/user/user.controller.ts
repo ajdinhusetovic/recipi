@@ -1,4 +1,19 @@
-import { Body, Controller, Delete, Get, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  FileTypeValidator,
+  Get,
+  ParseFilePipe,
+  Post,
+  Put,
+  Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/CreateUserDto';
 import { UserService } from './user.services';
 import { UserResponseInterface } from './types/userResponse.interface';
@@ -8,6 +23,7 @@ import { ExpressRequestInterface } from 'src/types/expressRequest.interface';
 import { User } from './decorators/user.decorator';
 import { AuthGuard } from './guards/auth.guard';
 import { UpdateUserDto } from './dto/UpdateUserDto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UserController {
@@ -19,8 +35,14 @@ export class UserController {
 
   @Post('register')
   @UsePipes(new ValidationPipe())
-  async createUser(@Body('user') createUserDto: CreateUserDto): Promise<UserEntity> {
-    return await this.userService.createUser(createUserDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async createUser(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFile(new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })] }))
+    file: Express.Multer.File,
+  ): Promise<UserEntity> {
+    console.log(file);
+    return await this.userService.createUser(createUserDto, file.originalname, file.buffer);
   }
 
   @Delete('user')

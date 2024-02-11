@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -8,15 +9,17 @@ import { sign } from 'jsonwebtoken';
 import { LogUserInDto } from './dto/LogUserInDto';
 import { compare } from 'bcrypt';
 import { UpdateUserDto } from './dto/UpdateUserDto';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class UserService {
+  private readonly s3Client = new S3Client({ region: process.env.AWS_S3_REGION });
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: CreateUserDto, fileName: string, file: Buffer): Promise<UserEntity> {
     const userByEmail = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     });
@@ -37,11 +40,13 @@ export class UserService {
       throw new HttpException('Password too short', HttpStatus.BAD_REQUEST);
     }
 
-    const newUser = new UserEntity();
+    const newUser = { ...createUserDto };
 
-    Object.assign(newUser, createUserDto);
+    await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
 
-    return await this.userRepository.save(newUser);
+    const user = { ...newUser, image: `https://recipieusers.s3.amazonaws.com/${fileName}` };
+
+    return await this.userRepository.save(user);
   }
 
   async deleteCurrentUser(currentUserId: number) {
