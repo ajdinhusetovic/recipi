@@ -54,7 +54,7 @@ export class RecipeController {
   @UsePipes(new ValidationPipe())
   async updateRecipe(
     @User('id') currentUserId: number,
-    @Body('recipe') updateRecipeDto: UpdateRecipeDto,
+    @Body() updateRecipeDto: UpdateRecipeDto,
     @Param('slug') slug: string,
   ) {
     return await this.recipeService.updateRecipe(currentUserId, slug, updateRecipeDto);

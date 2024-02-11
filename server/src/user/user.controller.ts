@@ -53,14 +53,14 @@ export class UserController {
 
   @Put('user')
   @UseGuards(AuthGuard)
-  async updateUser(@User('id') currentUserId: number, @Body('user') updateUserDto: UpdateUserDto) {
+  async updateUser(@User('id') currentUserId: number, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.userService.updateUser(currentUserId, updateUserDto);
     return this.userService.buildUserResponse(user);
   }
 
   @Post('login')
   @UsePipes(new ValidationPipe())
-  async logInUser(@Body('user') logUserInDto: LogUserInDto): Promise<UserResponseInterface> {
+  async logInUser(@Body() logUserInDto: LogUserInDto): Promise<UserResponseInterface> {
     const user = await this.userService.logInUser(logUserInDto);
 
     return this.userService.buildUserResponse(user);
