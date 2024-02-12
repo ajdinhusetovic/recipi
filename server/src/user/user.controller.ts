@@ -38,11 +38,16 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   async createUser(
     @Body() createUserDto: CreateUserDto,
-    @UploadedFile(new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })] }))
+    @UploadedFile(
+      new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }),
+    )
     file: Express.Multer.File,
   ): Promise<UserEntity> {
     console.log(file);
-    return await this.userService.createUser(createUserDto, file.originalname, file.buffer);
+    if (file) {
+      return await this.userService.createUser(createUserDto, file.originalname, file.buffer);
+    }
+    return await this.userService.createUser(createUserDto);
   }
 
   @Delete('user')

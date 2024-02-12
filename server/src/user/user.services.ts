@@ -7,7 +7,7 @@ import { CreateUserDto } from './dto/CreateUserDto';
 import { UserResponseInterface } from './types/userResponse.interface';
 import { sign } from 'jsonwebtoken';
 import { LogUserInDto } from './dto/LogUserInDto';
-import { compare } from 'bcrypt';
+import { compare, compareSync } from 'bcrypt';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
@@ -19,7 +19,7 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto, fileName: string, file: Buffer): Promise<UserEntity> {
+  async createUser(createUserDto: CreateUserDto, fileName?: string, file?: Buffer): Promise<UserEntity> {
     const userByEmail = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     });
@@ -40,13 +40,15 @@ export class UserService {
       throw new HttpException('Password too short', HttpStatus.BAD_REQUEST);
     }
 
-    const newUser = { ...createUserDto };
+    const newUser = new UserEntity();
+    Object.assign(newUser, createUserDto);
 
-    await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
+    if (file && fileName) {
+      await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
+      newUser.image = `https://recipieusers.s3.amazonaws.com/${fileName}`;
+    }
 
-    const user = { ...newUser, image: `https://recipieusers.s3.amazonaws.com/${fileName}` };
-
-    return await this.userRepository.save(user);
+    return await this.userRepository.save(newUser);
   }
 
   async deleteCurrentUser(currentUserId: number) {
@@ -70,6 +72,8 @@ export class UserService {
     }
 
     const isPasswordValid = await compare(logUserInDto.password, user.password);
+    console.log(isPasswordValid);
+    console.log(compareSync(logUserInDto.password, user.password));
 
     if (!isPasswordValid) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
