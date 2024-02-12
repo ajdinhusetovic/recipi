@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RecipeEntity } from './recipe.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateRecipeDto } from './dto/CreateRecipeDto';
 import { UserEntity } from '../user/user.entity';
 import { UpdateRecipeDto } from './dto/UpdateRecipeDto';
@@ -15,6 +15,7 @@ export class RecipeService {
   constructor(
     @InjectRepository(RecipeEntity) private readonly recipeRepository: Repository<RecipeEntity>,
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    private dataSource: DataSource,
   ) {}
 
   async getAllRecipes() {
@@ -25,11 +26,27 @@ export class RecipeService {
     return { results: recipeCount, recipes };
   }
 
+  async getFeed(currentUserId: number, query: any) {
+    const queryBuilder = this.dataSource
+      .getRepository(RecipeEntity)
+      .createQueryBuilder('recipes')
+      .leftJoinAndSelect('recipes.user', 'user');
+
+    if (query.limit) {
+      queryBuilder.limit(query.limit);
+    }
+
+    const recipes = await queryBuilder.getMany();
+    const recipesCount = await queryBuilder.getCount();
+
+    return { recipesCount, recipes };
+  }
+
   async createRecipe(
     currentUserId: number,
     createRecipeDto: CreateRecipeDto,
-    fileName: string,
-    file: Buffer,
+    fileName?: string,
+    file?: Buffer,
   ): Promise<RecipeEntity> {
     const user = await this.userRepository.findOne({ where: { id: currentUserId } });
 
@@ -38,13 +55,20 @@ export class RecipeService {
     }
 
     const newRecipe = { ...createRecipeDto };
+    let recipe;
 
-    await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipiebucket', Key: fileName, Body: file }));
+    if (file && fileName) {
+      await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipiebucket', Key: fileName, Body: file }));
+      recipe = this.recipeRepository.create({
+        ...newRecipe,
+        user,
+        image: `https://recipiebucket.s3.amazonaws.com/${fileName}`,
+      });
+    }
 
-    const recipe = this.recipeRepository.create({
+    recipe = this.recipeRepository.create({
       ...newRecipe,
       user,
-      image: `https://recipiebucket.s3.amazonaws.com/${fileName}`,
     });
 
     recipe.slug = slugify(recipe.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
@@ -63,13 +87,15 @@ export class RecipeService {
       throw new HttpException('You are not the owner of this recipe', HttpStatus.FORBIDDEN);
     }
 
-    const url = recipe.image;
+    if (recipe.image) {
+      const url = recipe.image;
 
-    const urlParts = url.split('/');
-    const objectKey = urlParts.slice(3).join('/');
-    console.log(objectKey);
+      const urlParts = url.split('/');
+      const objectKey = urlParts.slice(3).join('/');
+      console.log(objectKey);
 
-    await this.s3Client.send(new DeleteObjectCommand({ Bucket: 'recipiebucket', Key: objectKey }));
+      await this.s3Client.send(new DeleteObjectCommand({ Bucket: 'recipiebucket', Key: objectKey }));
+    }
 
     return await this.recipeRepository.delete({ slug });
   }

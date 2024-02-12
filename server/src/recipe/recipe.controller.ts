@@ -8,6 +8,7 @@ import {
   ParseFilePipe,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -27,7 +28,12 @@ export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
   @Get()
   async getAllRecipes() {
-    return this.recipeService.getAllRecipes();
+    return await this.recipeService.getAllRecipes();
+  }
+
+  @Get('feed')
+  async getFeed(@User('id') currentUserId: number, @Query() query: any) {
+    return this.recipeService.getFeed(currentUserId, query);
   }
 
   @Post()
@@ -37,10 +43,16 @@ export class RecipeController {
   async createRecipe(
     @User('id') currentUserId: number,
     @Body() createRecipeDto: CreateRecipeDto,
-    @UploadedFile(new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })] }))
+    @UploadedFile(
+      new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }),
+    )
     file: Express.Multer.File,
   ): Promise<RecipeEntity> {
-    return await this.recipeService.createRecipe(currentUserId, createRecipeDto, file.originalname, file.buffer);
+    if (file) {
+      return await this.recipeService.createRecipe(currentUserId, createRecipeDto, file.originalname, file.buffer);
+    }
+
+    return await this.recipeService.createRecipe(currentUserId, createRecipeDto);
   }
 
   @Delete(':slug')
