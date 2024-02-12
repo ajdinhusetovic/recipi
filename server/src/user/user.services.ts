@@ -7,7 +7,7 @@ import { CreateUserDto } from './dto/CreateUserDto';
 import { UserResponseInterface } from './types/userResponse.interface';
 import { sign } from 'jsonwebtoken';
 import { LogUserInDto } from './dto/LogUserInDto';
-import { compare, compareSync } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
@@ -72,8 +72,6 @@ export class UserService {
     }
 
     const isPasswordValid = await compare(logUserInDto.password, user.password);
-    console.log(isPasswordValid);
-    console.log(compareSync(logUserInDto.password, user.password));
 
     if (!isPasswordValid) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
