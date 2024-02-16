@@ -2,8 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import InputComponent from "../utils/InputComponent";
 import { Button } from "@/components/ui/button";
-import registerBg from "../../public/recipie_logo-removebg-preview.png";
-
 const Register = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -24,7 +22,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-zinc-950">
+    <div className="flex min-h-screen">
       <div className="w-2/5 bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 p-10">
         <h1 className="text-black text-7xl font-semibold mt-24">
           Saving and browsing for recipes has never been easier.
