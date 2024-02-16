@@ -64,12 +64,12 @@ export class RecipeService {
         user,
         image: `https://recipiebucket.s3.amazonaws.com/${fileName}`,
       });
+    } else {
+      recipe = this.recipeRepository.create({
+        ...newRecipe,
+        user,
+      });
     }
-
-    recipe = this.recipeRepository.create({
-      ...newRecipe,
-      user,
-    });
 
     recipe.slug = slugify(recipe.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
 
