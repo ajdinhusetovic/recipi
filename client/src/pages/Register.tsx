@@ -2,22 +2,40 @@ import { useState } from "react";
 import axios from "axios";
 import InputComponent from "../utils/InputComponent";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+
 const Register = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleRegister = (e) => {
+  const { toast } = useToast();
+
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      axios.post("http://localhost:3000/users/register", {
+      await axios.post("http://localhost:3000/users/register", {
         username: username,
         email: email,
         password: password,
       });
+
+      toast({ title: "Account created", variant: "success" });
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        console.error("Request failed with status:", error.response?.status);
+        console.error("Error data:", error.response?.data);
+        toast({
+          title:
+            error.response?.data.message ||
+            "There has been an error creating your account",
+          variant: "fail",
+        });
+      } else {
+        console.error(error);
+        toast({ title: "An error occurred", variant: "fail" });
+      }
     }
   };
 
@@ -29,7 +47,7 @@ const Register = () => {
         </h1>
       </div>
       <div className="w-3/5 flex flex-col items-center justify-center p-10">
-        <h1 className="text-amber-50 font-medium text-5xl text-center p-14">
+        <h1 className="text-black font-medium text-5xl text-center p-14">
           Create your Recipie account.
         </h1>
         <form

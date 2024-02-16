@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Recipes from "./pages/Recipes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/register" element={<Register />} />
           </Routes>
         </Router>
+        <Toaster />
       </div>
     </QueryClientProvider>
   );

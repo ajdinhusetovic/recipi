@@ -13,11 +13,11 @@ const InputComponent: React.FC<InputComponentProps> = ({
 }) => {
   return (
     <div className="flex flex-col text-white">
-      <label className="text-neutral-300 p-1">{label}</label>
+      <label className="text-black p-1">{label}</label>
       <input
         type={type}
         onChange={onChange}
-        className="text-black w-96 p-2 text-xl rounded focus:outline-none"
+        className="text-black w-96 p-2 text-xl rounded focus:outline-none border"
       />
     </div>
   );
