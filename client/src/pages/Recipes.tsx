@@ -1,12 +1,18 @@
 import RecipeCard from "@/components/RecipeCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Recipe from "@/types/RecipeInterface";
+import { Recipe } from "@/types/RecipeInterface";
 import { useEffect } from "react";
 
 const Recipes = () => {
-  let cachedData = localStorage.getItem("recipes");
-  cachedData = JSON.parse(cachedData);
+  const cachedDataString = localStorage.getItem("recipes");
+  let cachedData;
+
+  if (cachedDataString) {
+    cachedData = JSON.parse(cachedDataString);
+  } else {
+    console.log("No data in local storage");
+  }
 
   const fetchRecipeData = async () => {
     try {
