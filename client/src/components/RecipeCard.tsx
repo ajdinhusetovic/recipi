@@ -1,4 +1,5 @@
 import Recipe from "@/types/RecipeInterface";
+import { Link } from "react-router-dom";
 
 const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
   const MAX_TITLE_LENGTH = 40;
@@ -22,9 +23,9 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
         </ul>
         <h1 className="text-2xl mt-3">{truncatedTitle}</h1>
 
-        <a href="#" className="underline float-right mt-4">
+        <Link to={`/${recipe.slug}`} className="underline float-right mt-4">
           View recipe
-        </a>
+        </Link>
       </div>
     </div>
   );
