@@ -8,6 +8,7 @@ import { UserEntity } from '../user/user.entity';
 import { UpdateRecipeDto } from './dto/UpdateRecipeDto';
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import slugify from 'slugify';
+import { StepEntity } from 'src/step/step.entity';
 
 @Injectable()
 export class RecipeService {
@@ -15,11 +16,12 @@ export class RecipeService {
   constructor(
     @InjectRepository(RecipeEntity) private readonly recipeRepository: Repository<RecipeEntity>,
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(StepEntity) private readonly stepRepository: Repository<StepEntity>,
     private dataSource: DataSource,
   ) {}
 
   async getAllRecipes() {
-    const recipes = await this.recipeRepository.find({ relations: ['user'] });
+    const recipes = await this.recipeRepository.find({ relations: ['user', 'steps'] });
 
     const recipeCount = recipes.length;
 
@@ -73,17 +75,37 @@ export class RecipeService {
         ...newRecipe,
         user,
         image: `https://recipiebucket.s3.amazonaws.com/${fileName}`,
+        steps: [],
       });
     } else {
       recipe = this.recipeRepository.create({
         ...newRecipe,
         user,
+        steps: [],
       });
     }
 
     recipe.slug = slugify(recipe.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
 
-    return await this.recipeRepository.save(recipe);
+    const savedRecipe = await this.recipeRepository.save(recipe);
+
+    if (createRecipeDto.steps && createRecipeDto.steps.length > 0) {
+      // Create and associate steps with the recipe
+      const steps = createRecipeDto.steps.map((stepInstruction, index) =>
+        this.stepRepository.create({
+          instruction: stepInstruction,
+          stepNumber: index + 1, // 1-indexed step number
+          recipe: savedRecipe, // Associate the step with the saved recipe
+        }),
+      );
+
+      await this.stepRepository.save(steps);
+
+      // Update the saved recipe with the associated steps
+      savedRecipe.steps = steps;
+    }
+
+    return savedRecipe;
   }
 
   async deleteRecipe(currentUserId: number, slug: string) {

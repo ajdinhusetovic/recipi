@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
+import { StepEntity } from 'src/step/step.entity';
 
 @Entity({ name: 'recipes' })
 export class RecipeEntity {
@@ -21,9 +22,6 @@ export class RecipeEntity {
   @Column('simple-array')
   tags: string[];
 
-  @Column()
-  instructions: string;
-
   @Column({ default: '' })
   videoLink: string;
 
@@ -32,6 +30,9 @@ export class RecipeEntity {
 
   @Column({ default: '' })
   image: string;
+
+  @OneToMany(() => StepEntity, (step) => step.recipe, { cascade: true })
+  steps: StepEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.recipes, { eager: true })
   user: UserEntity;
