@@ -4,12 +4,13 @@ import InputComponent from "@/components/InputComponent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
-const Register = () => {
+const Login = () => {
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(["token"]);
 
   const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const { toast } = useToast();
@@ -18,13 +19,17 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/users/register", {
+      const response = await axios.post("http://localhost:3000/users/login", {
         username: username,
-        email: email,
         password: password,
       });
 
-      toast({ title: "Account created", variant: "success" });
+      console.log(response.data);
+      const token = response.data.user.token;
+      setCookie("token", token, { path: "/" });
+
+      toast({ title: "Log in successful", variant: "success" });
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Request failed with status:", error.response?.status);
@@ -51,21 +56,16 @@ const Register = () => {
       </div>
       <div className="w-3/5 flex flex-col items-center justify-center p-10">
         <h1 className="font-medium text-5xl text-center p-14">
-          Create your Recipie account.
+          Log In To Your Recipie Account.
         </h1>
         <form
           onSubmit={handleRegister}
           className="flex flex-col gap-3 items-center"
         >
           <InputComponent
-            type="text"
             label="Username"
+            type="text"
             onChange={(e) => setUsername(e.target.value)}
-          />
-          <InputComponent
-            label="Email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
           />
           <InputComponent
             label="Password"
@@ -74,7 +74,7 @@ const Register = () => {
           />
           <div className="flex items-center justify-center gap-3 w-full">
             <Button
-              type="submit"
+              onClick={() => navigate("/register")}
               size="lg"
               variant="secondary"
               className="text-1xl mt-4 text-dark-text w-1/2"
@@ -82,7 +82,7 @@ const Register = () => {
               Create my account
             </Button>
             <Button
-              onClick={() => navigate("/login")}
+              type="submit"
               size="lg"
               variant="secondary"
               className="text-1xl mt-4 text-dark-text w-1/2"
@@ -96,4 +96,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
