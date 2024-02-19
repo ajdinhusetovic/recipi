@@ -36,11 +36,11 @@ const RecipePage: React.FC = () => {
             width={500}
             className="float-left justify-self-start"
           />
-          <div className="my-5">
+          <div className="mt-4">
             <p className="text-lg">{data.description}</p>
           </div>
           <div className="my-5">
-            <h1 className="text-3xl font-medium py-3">Ingredients</h1>
+            <h1 className="text-3xl font-medium p-3">Ingredients</h1>
             <ul>
               {data.ingredients.map((ingredient: string, index: number) => (
                 <li key={index} className="list-disc ml-8 text-lg py-1">
