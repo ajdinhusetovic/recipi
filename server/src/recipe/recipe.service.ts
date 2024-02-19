@@ -26,6 +26,16 @@ export class RecipeService {
     return { results: recipeCount, recipes };
   }
 
+  async getRecipe(slug: string) {
+    const recipe = await this.recipeRepository.findOne({ where: { slug } });
+
+    if (!recipe) {
+      throw new HttpException('Recipe does not exist', HttpStatus.NOT_FOUND);
+    }
+
+    return recipe;
+  }
+
   async getFeed(currentUserId: number, query: any) {
     const queryBuilder = this.dataSource
       .getRepository(RecipeEntity)

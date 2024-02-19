@@ -31,9 +31,14 @@ export class RecipeController {
     return await this.recipeService.getAllRecipes();
   }
 
+  @Get(':slug')
+  async getRecipe(@Param('slug') slug: string) {
+    return await this.recipeService.getRecipe(slug);
+  }
+
   @Get('feed')
   async getFeed(@User('id') currentUserId: number, @Query() query: any) {
-    return this.recipeService.getFeed(currentUserId, query);
+    return await this.recipeService.getFeed(currentUserId, query);
   }
 
   @Post()

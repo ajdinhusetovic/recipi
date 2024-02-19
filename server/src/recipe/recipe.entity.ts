@@ -12,6 +12,9 @@ export class RecipeEntity {
   @Column()
   name: string;
 
+  @Column()
+  description: string;
+
   @Column('simple-array')
   ingredients: string[];
 
