@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import InputComponent from "../utils/InputComponent";
+import InputComponent from "@/components/InputComponent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -42,12 +42,12 @@ const Register = () => {
   return (
     <div className="flex min-h-screen">
       <div className="w-2/5 bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 p-10">
-        <h1 className="text-black text-7xl font-semibold mt-24">
+        <h1 className="text-7xl font-semibold mt-24">
           Saving and browsing for recipes has never been easier.
         </h1>
       </div>
       <div className="w-3/5 flex flex-col items-center justify-center p-10">
-        <h1 className="text-black font-medium text-5xl text-center p-14">
+        <h1 className="font-medium text-5xl text-center p-14">
           Create your Recipie account.
         </h1>
         <form
@@ -73,7 +73,7 @@ const Register = () => {
             type="submit"
             size="lg"
             variant="secondary"
-            className="text-1xl mt-4"
+            className="text-1xl mt-4 text-dark-text"
           >
             Create my account
           </Button>
