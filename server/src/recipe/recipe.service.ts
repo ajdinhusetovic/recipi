@@ -29,7 +29,7 @@ export class RecipeService {
   }
 
   async getRecipe(slug: string) {
-    const recipe = await this.recipeRepository.findOne({ where: { slug } });
+    const recipe = await this.recipeRepository.findOne({ where: { slug }, relations: ['steps'] });
 
     if (!recipe) {
       throw new HttpException('Recipe does not exist', HttpStatus.NOT_FOUND);
@@ -90,18 +90,16 @@ export class RecipeService {
     const savedRecipe = await this.recipeRepository.save(recipe);
 
     if (createRecipeDto.steps && createRecipeDto.steps.length > 0) {
-      // Create and associate steps with the recipe
       const steps = createRecipeDto.steps.map((stepInstruction, index) =>
         this.stepRepository.create({
           instruction: stepInstruction,
-          stepNumber: index + 1, // 1-indexed step number
-          recipe: savedRecipe, // Associate the step with the saved recipe
+          stepNumber: index + 1,
+          recipe: savedRecipe,
         }),
       );
 
       await this.stepRepository.save(steps);
 
-      // Update the saved recipe with the associated steps
       savedRecipe.steps = steps;
     }
 
@@ -118,6 +116,8 @@ export class RecipeService {
     if (recipe.user.id !== currentUserId) {
       throw new HttpException('You are not the owner of this recipe', HttpStatus.FORBIDDEN);
     }
+
+    await this.stepRepository.delete({ recipe: recipe });
 
     if (recipe.image) {
       const url = recipe.image;
