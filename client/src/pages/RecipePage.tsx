@@ -8,7 +8,7 @@ const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["recipes", slug], // Include slug in queryKey to make it unique for each recipe
+    queryKey: ["recipes", slug],
     queryFn: async () => {
       const response = await axios.get(`http://localhost:3000/recipes/${slug}`);
       return response.data;
