@@ -126,4 +126,14 @@ export class UserService {
 
     return { results, users };
   }
+
+  async getCurrentUser(currentUserId: number) {
+    const user = await this.userRepository.findOne({ where: { id: currentUserId } });
+
+    if (!user) {
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
+  }
 }

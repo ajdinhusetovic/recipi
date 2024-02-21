@@ -33,6 +33,12 @@ export class UserController {
     return await this.userService.getAllUsers();
   }
 
+  @Get('me')
+  @UseGuards(AuthGuard)
+  async getCurrentUser(@User('id') currentUserId: number) {
+    return await this.userService.getCurrentUser(currentUserId);
+  }
+
   @Post('register')
   @UsePipes(new ValidationPipe())
   @UseInterceptors(FileInterceptor('file'))
