@@ -64,7 +64,7 @@ const RecipePage: React.FC = () => {
             Recipe created by{" "}
             <span
               className="text-red-500 underline cursor-pointer"
-              onClick={() => navigate("/me")}
+              onClick={() => navigate(`/users/${data.user.username}`)}
             >
               {data.user.username}
             </span>
