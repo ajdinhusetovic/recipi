@@ -48,19 +48,19 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      <div className="w-2/5 bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 p-10">
-        <h1 className="text-7xl font-semibold mt-24">
+    <div className="flex flex-col xl:flex-row min-h-screen h-screen">
+      <div className="w-full h-1/4 xl:w-2/5 xl:h-full bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 flex items-center justify-center xl:block xl:p-10">
+        <h1 className="text-3xl md:text-4xl text-center xl:text-left xl:text-7xl font-semibold xl:mt-24">
           Saving and browsing for recipes has never been easier.
         </h1>
       </div>
-      <div className="w-3/5 flex flex-col items-center justify-center p-10">
-        <h1 className="font-medium text-5xl text-center p-14">
+      <div className="mt-10 md:mt-0 w-full h-full xl:w-3/5 xl:h-full flex flex-col items-center md:justify-center xl:p-10">
+        <h1 className="text-3xl md:text-4xl font-medium xl:text-5xl text-center xl:p-14">
           Log In To Your Recipie Account.
         </h1>
         <form
           onSubmit={handleRegister}
-          className="flex flex-col gap-3 items-center"
+          className="flex flex-col gap-3 items-center mt-8 xl:mt-0"
         >
           <InputComponent
             label="Username"
