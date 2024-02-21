@@ -1,9 +1,9 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class LogUserInDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Username is missing. ' })
   readonly username: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password is missing.' })
   readonly password: string;
 }

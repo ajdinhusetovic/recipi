@@ -136,4 +136,14 @@ export class UserService {
 
     return user;
   }
+
+  async getUserByUsername(username: string) {
+    const user = await this.userRepository.findOne({ where: { username }, relations: ['recipes'] });
+
+    if (!user) {
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
+  }
 }

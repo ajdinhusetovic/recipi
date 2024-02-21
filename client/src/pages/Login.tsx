@@ -72,7 +72,7 @@ const Login = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div className="flex items-center justify-center gap-3 w-full">
+          <div className="flex items-center justify-center gap-3 w-11/12 md:w-full">
             <Button
               onClick={() => navigate("/register")}
               size="lg"

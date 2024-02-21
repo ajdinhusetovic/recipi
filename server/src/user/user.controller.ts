@@ -4,6 +4,7 @@ import {
   Delete,
   FileTypeValidator,
   Get,
+  Param,
   ParseFilePipe,
   Post,
   Put,
@@ -37,6 +38,11 @@ export class UserController {
   @UseGuards(AuthGuard)
   async getCurrentUser(@User('id') currentUserId: number) {
     return await this.userService.getCurrentUser(currentUserId);
+  }
+
+  @Get(':username')
+  async getUserByUsername(@Param('username') username: string) {
+    return await this.userService.getUserByUsername(username);
   }
 
   @Post('register')
