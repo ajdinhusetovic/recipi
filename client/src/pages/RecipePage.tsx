@@ -1,11 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { StepInterface } from "@/types/StepInterface";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+
+  const navigate = useNavigate();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["recipes", slug],
@@ -60,7 +62,12 @@ const RecipePage: React.FC = () => {
           </div>
           <p className="self-end mb-5">
             Recipe created by{" "}
-            <span className="text-red-500 underline">{data.user.username}</span>
+            <span
+              className="text-red-500 underline cursor-pointer"
+              onClick={() => navigate("/me")}
+            >
+              {data.user.username}
+            </span>
           </p>
         </div>
       </div>
