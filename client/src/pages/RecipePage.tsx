@@ -59,7 +59,8 @@ const RecipePage: React.FC = () => {
             ))}
           </div>
           <p className="self-end mb-5">
-            Recipe created by {data.user.username}
+            Recipe created by{" "}
+            <span className="text-red-500 underline">{data.user.username}</span>
           </p>
         </div>
       </div>
