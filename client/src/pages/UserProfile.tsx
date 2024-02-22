@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import profileAvatar from "../../public/account-avatar-profile-user-11-svgrepo-com.svg";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import RecipeCard from "@/components/RecipeCard";
@@ -17,20 +17,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DecodedToken {
   username: string;
 }
 
 const UserProfile = () => {
+  const navigate = useNavigate();
+
   const { username } = useParams();
-  const [cookies, _] = useCookies();
+  const [cookies, setCookie] = useCookies();
+
+  const { toast } = useToast();
 
   const [usernameEdit, setUsernameEdit] = useState("");
   const [bioEdit, setBioEdit] = useState("");
 
   const decodedToken: DecodedToken = jwtDecode(cookies.token);
-  console.log(decodedToken);
 
   const cachedDataString = localStorage.getItem("recipes");
   let cachedData;
@@ -41,7 +45,7 @@ const UserProfile = () => {
     console.log("No data in local storage");
   }
 
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const response = await axios.get(
@@ -63,12 +67,10 @@ const UserProfile = () => {
   }
 
   const isSameUser = decodedToken.username === data.username;
-  console.log(isSameUser);
-  console.log(data);
 
   const handleUserUpdate = async () => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:3000/users/user`,
         {
           username: usernameEdit || data.username,
@@ -78,9 +80,29 @@ const UserProfile = () => {
           headers: { Authorization: `Bearer ${cookies.token}` },
         }
       );
+      const newToken = response.data.user.token;
+      setCookie("token", newToken, { path: "/" });
+      navigate(`/users/${usernameEdit}`);
       window.location.reload();
+      await refetch();
     } catch (error) {
       console.log(error);
+      const errorMessages = error.response.data.message;
+
+      if (Array.isArray(errorMessages)) {
+        toast({
+          title:
+            errorMessages[0] || "There has been an error updating your account",
+          variant: "fail",
+        });
+      } else if (typeof errorMessages === "string") {
+        // Handle single error message
+        toast({
+          title:
+            errorMessages || "There has been an error creating your account",
+          variant: "fail",
+        });
+      }
     }
   };
 
@@ -121,10 +143,10 @@ const UserProfile = () => {
                         (Max 200 characters)
                       </span>
                     </label>
-                    <input
-                      type="text"
+                    <textarea
                       onChange={(e) => setBioEdit(e.target.value)}
-                      className="border outline-none p-1 rounded"
+                      className="border outline-none p-1 rounded resize-none"
+                      rows={6}
                     />
                   </div>
                 </div>

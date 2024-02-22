@@ -70,6 +70,7 @@ export class UserController {
 
   @Put('user')
   @UseGuards(AuthGuard)
+  @UsePipes(new ValidationPipe())
   async updateUser(@User('id') currentUserId: number, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.userService.updateUser(currentUserId, updateUserDto);
     return this.userService.buildUserResponse(user);
