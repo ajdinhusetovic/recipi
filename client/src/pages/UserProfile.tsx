@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import profileAvatar from "../../public/account-avatar-profile-user-11-svgrepo-com.svg";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import RecipeCard from "@/components/RecipeCard";
 import { Recipe } from "@/types/RecipeInterface";
 import { jwtDecode } from "jwt-decode";
@@ -82,7 +81,7 @@ const UserProfile = () => {
       );
       const newToken = response.data.user.token;
       setCookie("token", newToken, { path: "/" });
-      navigate(`/users/${usernameEdit}`);
+      navigate(`/users/${usernameEdit || data.username}`);
       window.location.reload();
       await refetch();
     } catch (error) {
