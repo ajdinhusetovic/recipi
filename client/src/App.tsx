@@ -8,6 +8,7 @@ import RecipePage from "./pages/RecipePage";
 import Login from "./pages/Login";
 import { CookiesProvider } from "react-cookie";
 import UserProfile from "./pages/UserProfile";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ function App() {
       <CookiesProvider>
         <div className="bg-white">
           <Router>
+            <Navbar />
             <Routes>
               <Route path="/" element={<Recipes />} />
               <Route path="/register" element={<Register />} />
