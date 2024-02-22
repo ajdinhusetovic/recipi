@@ -17,7 +17,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import InputComponent from "@/components/InputComponent";
 
 interface DecodedToken {
   username: string;
@@ -67,6 +66,24 @@ const UserProfile = () => {
   console.log(isSameUser);
   console.log(data);
 
+  const handleUserUpdate = async () => {
+    try {
+      await axios.put(
+        `http://localhost:3000/users/user`,
+        {
+          username: usernameEdit || data.username,
+          bio: bioEdit || data.bio,
+        },
+        {
+          headers: { Authorization: `Bearer ${cookies.token}` },
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full h-screen">
       <div className="w-7/12 my-0 mx-auto h-full flex items-center">
@@ -76,43 +93,50 @@ const UserProfile = () => {
           <p className="text-2xl mt-4 w-11/12 mx-auto text-center">
             {data.bio}
           </p>
-          <Dialog>
-            <DialogTrigger>
-              <Button className="mt-4">Edit profile</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
-                <DialogDescription>
-                  Click Save Changes to finish updating your profile.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex flex-col w-full">
-                <div className="flex flex-col">
-                  <label>Username</label>
-                  <input
-                    type="text"
-                    onChange={(e) => setUsernameEdit(e.target.value)}
-                    className="border outline-none p-1 rounded"
-                  />
+          {isSameUser && (
+            <Dialog>
+              <DialogTrigger>
+                <Button className="mt-4">Edit profile</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit profile</DialogTitle>
+                  <DialogDescription>
+                    Click Save Changes to finish updating your profile.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col w-full">
+                  <div className="flex flex-col">
+                    <label>Username</label>
+                    <input
+                      type="text"
+                      onChange={(e) => setUsernameEdit(e.target.value)}
+                      className="border outline-none p-1 rounded"
+                    />
+                  </div>
+                  <div className="flex flex-col mt-4">
+                    <label>
+                      Bio{" "}
+                      <span className="text-sm text-gray-500">
+                        (Max 200 characters)
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      onChange={(e) => setBioEdit(e.target.value)}
+                      className="border outline-none p-1 rounded"
+                    />
+                  </div>
                 </div>
-                <div className="flex flex-col mt-4">
-                  <label>
-                    Bio{" "}
-                    <span className="text-sm text-gray-500">
-                      (Max 200 characters)
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    onChange={(e) => setBioEdit(e.target.value)}
-                    className="border outline-none p-1 rounded"
-                  />
-                </div>
-              </div>
-              <Button className="w-1/2 float-right">Save Changes</Button>
-            </DialogContent>
-          </Dialog>
+                <Button
+                  className="w-1/2 float-right"
+                  onClick={handleUserUpdate}
+                >
+                  Save Changes
+                </Button>
+              </DialogContent>
+            </Dialog>
+          )}
           <p className="text-lg mt-8 mb-3">
             Recipes created: {data.recipes.length}
           </p>
