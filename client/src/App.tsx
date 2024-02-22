@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import RecipePage from "./pages/RecipePage";
 import Login from "./pages/Login";
 import { CookiesProvider } from "react-cookie";
-import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient();
@@ -23,7 +22,6 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/:slug" element={<RecipePage />} />
-              <Route path="/users/me" element={<Profile />} />
               <Route path="/users/:username" element={<UserProfile />} />
             </Routes>
           </Router>
