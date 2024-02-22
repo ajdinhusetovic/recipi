@@ -31,15 +31,28 @@ const Login = () => {
       toast({ title: "Log in successful", variant: "success" });
       navigate("/");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Request failed with status:", error.response?.status);
-        console.error("Error data:", error.response?.data);
-        toast({
-          title:
-            error.response?.data.message ||
-            "There has been an error creating your account",
-          variant: "fail",
-        });
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const errorMessages = error.response.data.message;
+
+        if (Array.isArray(errorMessages)) {
+          // Handle array of error messages
+          toast({
+            title:
+              errorMessages[0] ||
+              "There has been an error creating your account",
+            variant: "fail",
+          });
+        } else if (typeof errorMessages === "string") {
+          // Handle single error message
+          toast({
+            title:
+              errorMessages || "There has been an error creating your account",
+            variant: "fail",
+          });
+        } else {
+          console.error("Unexpected error data format:", errorMessages);
+          toast({ title: "An unexpected error occurred", variant: "fail" });
+        }
       } else {
         console.error(error);
         toast({ title: "An error occurred", variant: "fail" });
