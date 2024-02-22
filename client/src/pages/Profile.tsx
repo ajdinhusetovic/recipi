@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
 import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
   const [cookies, setCookie] = useCookies(["token"]);
+
+  const decodedToken = jwtDecode(cookies.token);
+  console.log("TOKEN" + decodedToken);
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["recipes"],
@@ -21,12 +24,23 @@ const Profile = () => {
   }
 
   if (error) {
-    return <p>Error fetching data: {error.message}</p>;
+    return <p>YOU MUST LOG IN</p>;
   }
 
-  console.log(data);
+  console.log("Data: " + data);
 
-  return <div>Profile</div>;
+  return (
+    <div>
+      <div>
+        <div>
+          <h1>{data.username}</h1>
+          <p>{data.email}</p>
+          <p>{data.bio}</p>
+          {}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Profile;

@@ -17,7 +17,7 @@ const InputComponent: React.FC<InputComponentProps> = ({
       <input
         type={type}
         onChange={onChange}
-        className="text-dark-text xl:w-96 p-2 text-xl rounded focus:outline-none border"
+        className="text-dark-text xl:w-full p-2 text-xl rounded focus:outline-none border"
       />
     </div>
   );
