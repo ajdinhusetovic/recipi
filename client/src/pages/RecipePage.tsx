@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { StepInterface } from "@/types/StepInterface";
+import RecipeCard from "@/components/RecipeCard";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -29,7 +30,7 @@ const RecipePage: React.FC = () => {
 
   return (
     <div className="w-full">
-      <div className="md:w-8/12 md:my-0 lg:mx-auto flex flex-col">
+      <div className="md:w-8/12 md:my-0 md:mx-auto flex flex-col">
         <div className="lg:w-7/12 flex flex-col">
           <h1 className="w-11/12 mx-auto md:mx-0 text-3xl md:text-4xl lg:text-5xl font-medium my-6">
             {data.name}
@@ -73,7 +74,16 @@ const RecipePage: React.FC = () => {
           </p>
         </div>
       </div>
-      <div>aaa</div>
+      <div className="mt-5">
+        <div>
+          <h1 className="text-3xl text-center">You might also like</h1>
+          <div className="w-11/12 mx-auto flex flex-col justify-center items-center my-8 gap-4 md:flex-row md:flex-wrap">
+            {data.similarRecipes.map((recipe) => (
+              <RecipeCard recipe={recipe} />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

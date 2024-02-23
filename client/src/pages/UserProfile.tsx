@@ -108,7 +108,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full">
       <div className="w-7/12 my-0 mx-auto h-full flex items-center">
         <div className="w-7/12  my-0 mx-auto flex flex-col items-center">
           <img src={profileAvatar} alt="" width={100} />
