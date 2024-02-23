@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RecipeEntity } from './recipe.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Not, Repository } from 'typeorm';
 import { CreateRecipeDto } from './dto/CreateRecipeDto';
 import { UserEntity } from '../user/user.entity';
 import { UpdateRecipeDto } from './dto/UpdateRecipeDto';
@@ -29,11 +29,22 @@ export class RecipeService {
   }
 
   async getRecipe(slug: string) {
-    const recipe = await this.recipeRepository.findOne({ where: { slug }, relations: ['steps'] });
+    const recipe = await this.recipeRepository.findOne({
+      where: { slug },
+      relations: ['steps', 'similarRecipes'],
+    });
 
     if (!recipe) {
       throw new HttpException('Recipe does not exist', HttpStatus.NOT_FOUND);
     }
+
+    const allRecipes = await this.recipeRepository.find({ relations: ['steps'], where: { id: Not(recipe.id) } });
+
+    const similarRecipes = allRecipes.filter((similarRecipe) =>
+      recipe.name.split(' ').some((recipeName) => similarRecipe.name.includes(recipeName)),
+    );
+
+    recipe.similarRecipes = similarRecipes;
 
     return recipe;
   }

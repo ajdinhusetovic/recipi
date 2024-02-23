@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { StepEntity } from 'src/step/step.entity';
 
@@ -19,6 +19,9 @@ export class RecipeEntity {
   @Column('simple-array')
   ingredients: string[];
 
+  @Column()
+  difficulty: string;
+
   @Column('simple-array')
   tags: string[];
 
@@ -36,6 +39,10 @@ export class RecipeEntity {
 
   @Column({ default: '' })
   image: string;
+
+  @ManyToMany(() => RecipeEntity, { cascade: true })
+  @JoinTable()
+  similarRecipes: RecipeEntity[];
 
   @OneToMany(() => StepEntity, (step) => step.recipe, { cascade: true })
   steps: StepEntity[];
