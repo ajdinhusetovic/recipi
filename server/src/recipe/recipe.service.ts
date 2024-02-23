@@ -149,4 +149,38 @@ export class RecipeService {
 
     return await this.recipeRepository.save(recipe);
   }
+
+  async addRecipeToFavorites(slug: string, currentUserId: number) {
+    const recipe = await this.recipeRepository.findOne({ where: { slug } });
+    const user = await this.userRepository.findOne({ where: { id: currentUserId }, relations: ['favorites'] });
+
+    const isNotFavorited = user.favorites.findIndex((recipeInFavorites) => recipeInFavorites.id === recipe.id) === -1;
+
+    if (isNotFavorited) {
+      user.favorites.push(recipe);
+      recipe.favoritesCount++;
+
+      await this.userRepository.save(user);
+      await this.recipeRepository.save(recipe);
+    }
+
+    return recipe;
+  }
+
+  async removeRecipeFromFavorites(slug: string, currentUserId: number) {
+    const recipe = await this.recipeRepository.findOne({ where: { slug } });
+    const user = await this.userRepository.findOne({ where: { id: currentUserId }, relations: ['favorites'] });
+
+    const recipeIndex = user.favorites.findIndex((recipeInFavorites) => recipeInFavorites.id === recipe.id);
+
+    if (recipeIndex >= 0) {
+      user.favorites.splice(recipeIndex, 1);
+      recipe.favoritesCount--;
+
+      await this.userRepository.save(user);
+      await this.recipeRepository.save(recipe);
+    }
+
+    return recipe;
+  }
 }

@@ -76,4 +76,16 @@ export class RecipeController {
   ) {
     return await this.recipeService.updateRecipe(currentUserId, slug, updateRecipeDto);
   }
+
+  @Post(':slug/favorite')
+  @UseGuards(AuthGuard)
+  async addRecipeToFavorites(@User('id') currentUserId: number, @Param('slug') slug: string) {
+    return await this.recipeService.addRecipeToFavorites(slug, currentUserId);
+  }
+
+  @Delete(':slug/favorite')
+  @UseGuards(AuthGuard)
+  async removeRecipeFromFavorites(@User('id') currentUserId: number, @Param('slug') slug: string) {
+    return await this.recipeService.removeRecipeFromFavorites(slug, currentUserId);
+  }
 }

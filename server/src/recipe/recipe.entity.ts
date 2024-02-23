@@ -25,8 +25,14 @@ export class RecipeEntity {
   @Column({ default: '' })
   videoLink: string;
 
-  @Column({ default: '' })
-  recipeArea: string;
+  @Column()
+  prepTime: number;
+
+  @Column()
+  cookTime: number;
+
+  @Column({ default: 0 })
+  favoritesCount: number;
 
   @Column({ default: '' })
   image: string;
