@@ -33,7 +33,9 @@ const UserProfile = () => {
   const [usernameEdit, setUsernameEdit] = useState("");
   const [bioEdit, setBioEdit] = useState("");
 
-  const decodedToken: DecodedToken = jwtDecode(cookies.token);
+  const decodedToken: DecodedToken | null = cookies.token
+    ? jwtDecode(cookies.token)
+    : null;
 
   const cachedDataString = localStorage.getItem("recipes");
   let cachedData;
@@ -65,7 +67,7 @@ const UserProfile = () => {
     return <p>Error fetching data: {error.message}</p>;
   }
 
-  const isSameUser = decodedToken.username === data.username;
+  const isSameUser = decodedToken && decodedToken.username === data.username;
 
   const handleUserUpdate = async () => {
     try {
