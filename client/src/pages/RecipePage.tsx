@@ -29,16 +29,18 @@ const RecipePage: React.FC = () => {
 
   return (
     <div className="w-full">
-      <div className="w-8/12 my-0 mx-auto flex flex-col">
-        <div className="w-7/12 flex flex-col">
-          <h1 className="text-4xl font-medium my-6">{data.name}</h1>
+      <div className="md:w-8/12 md:my-0 lg:mx-auto flex flex-col">
+        <div className="lg:w-7/12 flex flex-col">
+          <h1 className="w-11/12 mx-auto md:mx-0 text-3xl md:text-4xl lg:text-5xl font-medium my-6">
+            {data.name}
+          </h1>
           <img
             src={data.image}
             alt=""
-            width={500}
+            width={700}
             className="float-left justify-self-start"
           />
-          <div className="mt-4">
+          <div className="w-11/12 mx-auto md:w-full mt-4">
             <p className="text-lg">{data.description}</p>
           </div>
           <div className="my-5">
@@ -51,7 +53,7 @@ const RecipePage: React.FC = () => {
               ))}
             </ul>
           </div>
-          <div className="my-5">
+          <div className="p-3 md:p-0  my-5">
             <h1 className="text-3xl font-medium py-3">How do I make it?</h1>
             {data.steps.map((step: StepInterface) => (
               <div key={step.stepNumber} className="py-2">
@@ -60,7 +62,7 @@ const RecipePage: React.FC = () => {
               </div>
             ))}
           </div>
-          <p className="self-end mb-5">
+          <p className="self-end mb-5 pr-3 md:pr-0">
             Recipe created by{" "}
             <span
               className="text-red-500 underline cursor-pointer"
@@ -71,6 +73,7 @@ const RecipePage: React.FC = () => {
           </p>
         </div>
       </div>
+      <div>aaa</div>
     </div>
   );
 };
