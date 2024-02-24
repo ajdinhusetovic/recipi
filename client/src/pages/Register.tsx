@@ -86,6 +86,9 @@ const Register = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
+          <a href="/" className="underline text-red-500 text-sm">
+            Continue without account
+          </a>
           <div className="flex items-center justify-center gap-3 w-11/12 md:w-full mb-12">
             <Button
               type="submit"
