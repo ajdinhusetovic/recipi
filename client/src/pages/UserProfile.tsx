@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
+import Navbar from "@/components/Navbar";
 
 interface DecodedToken {
   username: string;
@@ -108,69 +109,72 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className="w-7/12 my-0 mx-auto h-full flex items-center">
-        <div className="w-7/12  my-0 mx-auto flex flex-col items-center">
-          <img src={profileAvatar} alt="" width={100} />
-          <h1 className="text-5xl font-medium py-4">{data.username}</h1>
-          <p className="text-2xl mt-4 w-11/12 mx-auto text-center">
-            {data.bio}
-          </p>
-          {isSameUser && (
-            <Dialog>
-              <DialogTrigger>
-                <Button className="mt-4">Edit profile</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Edit profile</DialogTitle>
-                  <DialogDescription>
-                    Click Save Changes to finish updating your profile.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex flex-col w-full">
-                  <div className="flex flex-col">
-                    <label>Username</label>
-                    <input
-                      type="text"
-                      onChange={(e) => setUsernameEdit(e.target.value)}
-                      className="border outline-none p-1 rounded"
-                    />
+    <>
+      <Navbar />
+      <div className="w-full">
+        <div className="w-7/12 my-0 mx-auto h-full flex items-center">
+          <div className="w-7/12  my-0 mx-auto flex flex-col items-center">
+            <img src={profileAvatar} alt="" width={100} />
+            <h1 className="text-5xl font-medium py-4">{data.username}</h1>
+            <p className="text-2xl mt-4 w-11/12 mx-auto text-center">
+              {data.bio}
+            </p>
+            {isSameUser && (
+              <Dialog>
+                <DialogTrigger>
+                  <Button className="mt-4">Edit profile</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogDescription>
+                      Click Save Changes to finish updating your profile.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col w-full">
+                    <div className="flex flex-col">
+                      <label>Username</label>
+                      <input
+                        type="text"
+                        onChange={(e) => setUsernameEdit(e.target.value)}
+                        className="border outline-none p-1 rounded"
+                      />
+                    </div>
+                    <div className="flex flex-col mt-4">
+                      <label>
+                        Bio{" "}
+                        <span className="text-sm text-gray-500">
+                          (Max 200 characters)
+                        </span>
+                      </label>
+                      <textarea
+                        onChange={(e) => setBioEdit(e.target.value)}
+                        className="border outline-none p-1 rounded resize-none"
+                        rows={6}
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col mt-4">
-                    <label>
-                      Bio{" "}
-                      <span className="text-sm text-gray-500">
-                        (Max 200 characters)
-                      </span>
-                    </label>
-                    <textarea
-                      onChange={(e) => setBioEdit(e.target.value)}
-                      className="border outline-none p-1 rounded resize-none"
-                      rows={6}
-                    />
-                  </div>
-                </div>
-                <Button
-                  className="w-1/2 float-right"
-                  onClick={handleUserUpdate}
-                >
-                  Save Changes
-                </Button>
-              </DialogContent>
-            </Dialog>
-          )}
-          <p className="text-lg mt-8 mb-3">
-            Recipes created: {data.recipes.length}
-          </p>
-          <div className="border w-full overflow-y-auto h-[500px] flex justify-center gap-4 pt-4">
-            {data.recipes.map((recipe: Recipe) => (
-              <RecipeCard recipe={recipe} key={recipe.id} />
-            ))}
+                  <Button
+                    className="w-1/2 float-right"
+                    onClick={handleUserUpdate}
+                  >
+                    Save Changes
+                  </Button>
+                </DialogContent>
+              </Dialog>
+            )}
+            <p className="text-lg mt-8 mb-3">
+              Recipes created: {data.recipes.length}
+            </p>
+            <div className="border w-full overflow-y-auto h-[500px] flex justify-center gap-4 pt-4">
+              {data.recipes.map((recipe: Recipe) => (
+                <RecipeCard recipe={recipe} key={recipe.id} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

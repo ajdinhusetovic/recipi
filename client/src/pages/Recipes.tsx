@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Recipe } from "@/types/RecipeInterface";
 import { useEffect } from "react";
+import Navbar from "@/components/Navbar";
 
 const Recipes = () => {
   const cachedDataString = localStorage.getItem("recipes");
@@ -38,20 +39,23 @@ const Recipes = () => {
   }, []);
 
   return (
-    <div className="h-screen">
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error fetching data: {error.message}</p>
-      ) : (
-        <div className="p-10 flex gap-12">
-          {cachedData &&
-            cachedData.map((recipe: Recipe) => (
-              <RecipeCard recipe={recipe} key={recipe.id} />
-            ))}
-        </div>
-      )}
-    </div>
+    <>
+      <Navbar />
+      <div className="h-screen">
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error fetching data: {error.message}</p>
+        ) : (
+          <div className="p-10 flex gap-12">
+            {cachedData &&
+              cachedData.map((recipe: Recipe) => (
+                <RecipeCard recipe={recipe} key={recipe.id} />
+              ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

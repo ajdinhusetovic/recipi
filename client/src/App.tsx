@@ -18,7 +18,6 @@ function App() {
       <CookiesProvider>
         <div className="bg-white">
           <Router>
-            <Navbar />
             <Routes>
               <Route path="/" element={<Recipes />} />
               <Route path="/register" element={<Register />} />

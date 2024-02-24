@@ -15,53 +15,50 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between p-5 items-center">
-      <h1 className="text-4xl">LOGO</h1>
-      <ul className="hidden md:flex gap-6">
-        <li>
-          <Link>Home</Link>
-        </li>
-        <li>
-          <Link>User Favorites</Link>
-        </li>
-        <li>
-          <Link>My Profile</Link>
-        </li>
-        <li>
-          <Link>Register</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
-      <div className={` md:hidden gap-6 z-10`} onClick={handleNav}>
-        {nav ? <FaTimes size={25} /> : <RxHamburgerMenu size={25} />}
+    <nav className={`w-full ${nav ? "" : "h-[100px] md:h-[150px]"} border-b`}>
+      <div className="flex justify-between h-full w-11/12 mx-auto">
+        <div
+          className={`flex justify-between items-center h-full ${
+            nav ? "" : "w-full md:w-1/2"
+          }`}
+        >
+          {nav ? "" : <h1 className="items-self-center text-4xl">LOGO</h1>}
+          <div
+            className={`md:hidden flex justify-end p-2 ${
+              nav && "fixed top-0 right-0"
+            }`}
+            onClick={handleNav}
+          >
+            {nav ? <FaTimes size={25} /> : <RxHamburgerMenu size={25} />}
+          </div>
+        </div>
+        {nav && (
+          <ul className="md:hidden w-full h-screen flex flex-col items-center justify-center">
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>Link 2</li>
+            <li>Link 3</li>
+            <li>Link 4</li>
+            <li>Link 5</li>
+          </ul>
+        )}
+
+        <ul className="hidden md:flex items-center gap-5">
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>Link 2</li>
+          <li>Link 3</li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+          <li>
+            <Link to="/register">Register</Link>
+          </li>
+        </ul>
       </div>
-      <ul
-        className={`${
-          nav
-            ? "text-black opacity-100 bg-white transform translate-y-0"
-            : "opacity-0 transform translate-y-full"
-        } transition-transform absolute top-0 left-0 w-full flex flex-col justify-center items-center md:flex-row`}
-        style={{ minHeight: nav ? "100vh" : "auto" }}
-      >
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link>User Favorites</Link>
-        </li>
-        <li>
-          <Link>My Profile</Link>
-        </li>
-        <li>
-          <Link>Register</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
-    </div>
+    </nav>
   );
 };
 
