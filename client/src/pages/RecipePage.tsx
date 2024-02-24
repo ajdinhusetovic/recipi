@@ -5,6 +5,7 @@ import axios from "axios";
 import { StepInterface } from "@/types/StepInterface";
 import RecipeCard from "@/components/RecipeCard";
 import Navbar from "@/components/Navbar";
+import { Recipe } from "@/types/RecipeInterface";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -83,7 +84,7 @@ const RecipePage: React.FC = () => {
           <div>
             <h1 className="text-3xl text-center">You might also like</h1>
             <div className="w-11/12 mx-auto flex flex-col justify-center items-center my-8 gap-4 md:flex-row md:flex-wrap">
-              {data.similarRecipes.map((recipe) => (
+              {data.similarRecipes.map((recipe: Recipe) => (
                 <RecipeCard recipe={recipe} />
               ))}
             </div>

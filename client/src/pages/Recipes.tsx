@@ -47,7 +47,7 @@ const Recipes = () => {
         ) : error ? (
           <p>Error fetching data: {error.message}</p>
         ) : (
-          <div className="p-10 flex gap-12">
+          <div className="p-10 flex gap-12 flex-col lg:flex-row">
             {cachedData &&
               cachedData.map((recipe: Recipe) => (
                 <RecipeCard recipe={recipe} key={recipe.id} />

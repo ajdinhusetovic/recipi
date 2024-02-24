@@ -1,17 +1,41 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Recipe } from "@/types/RecipeInterface";
+import { useEffect, useState } from "react";
 
 const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
   const navigate = useNavigate();
+  const [maxTitleLength, setMaxTitleLength] = useState(50);
 
   let difficultyColor = "";
   const recipeTime = parseInt(recipe.prepTime) + parseInt(recipe.cookTime);
 
-  const MAX_TITLE_LENGTH = 40;
+  // let maxTitleLength = 50;
+
+  // if (window.innerWidth <= 768) {
+  //   maxTitleLength = 22; // Adjust this value as needed
+  // }
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Adjust maxTitleLength based on window width
+      setMaxTitleLength(window.innerWidth <= 1024 ? 32 : 50);
+    };
+
+    // Set maxTitleLength on mount
+    handleResize();
+
+    // Attach event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const truncatedTitle =
-    recipe.name.length > MAX_TITLE_LENGTH
-      ? `${recipe.name.slice(0, MAX_TITLE_LENGTH)}...`
+    recipe.name.length > maxTitleLength
+      ? `${recipe.name.slice(0, maxTitleLength)}...`
       : recipe.name;
 
   switch (recipe.difficulty.toLowerCase()) {
@@ -28,7 +52,7 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
 
   return (
     <div
-      className="w-56 h-[300px] md:h-96 md:w-72 border flex flex-col cursor-pointer"
+      className="w-56 h-[320px] md:h-96 md:w-72 border flex flex-col cursor-pointer"
       onClick={() => navigate(`/${recipe.slug}`)}
     >
       <img src={recipe.image} alt="" className="w-full h-1/2" />

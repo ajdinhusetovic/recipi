@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
@@ -13,6 +13,25 @@ const Navbar = () => {
       body.style.overflow = nav ? "auto" : "hidden";
     }
   };
+
+  useEffect(() => {
+    const body = document.querySelector("body");
+    if (body) {
+      body.style.overflow = "auto";
+    }
+
+    const handleBeforeUnload = () => {
+      if (body) {
+        body.style.overflow = "auto";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <nav className={`w-full ${nav ? "" : "h-[100px] md:h-[150px]"} border-b`}>
