@@ -8,7 +8,7 @@ import RecipePage from "./pages/RecipePage";
 import Login from "./pages/Login";
 import { CookiesProvider } from "react-cookie";
 import UserProfile from "./pages/UserProfile";
-import Navbar from "./components/Navbar";
+import CreateRecipe from "./pages/CreateRecipe";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +24,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/:slug" element={<RecipePage />} />
               <Route path="/users/:username" element={<UserProfile />} />
+              <Route path="/recipes/create-recipe" element={<CreateRecipe />} />
             </Routes>
           </Router>
           <Toaster />
