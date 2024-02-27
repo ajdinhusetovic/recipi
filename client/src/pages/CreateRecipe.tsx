@@ -3,9 +3,10 @@ import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { FaTimes } from "react-icons/fa";
 
 const CreateRecipe = () => {
-  const MAX_CHAR_LENGTH = 25;
+  const MAX_CHAR_LENGTH = 50;
   const { toast } = useToast();
 
   const [cookie, setCookies] = useCookies();
@@ -16,7 +17,7 @@ const CreateRecipe = () => {
   const [prepTime, setPrepTime] = useState(0);
   const [cookTime, setCookTime] = useState(0);
 
-  const [recipeDifficulty, setRecipeDifficulty] = useState("");
+  const [recipeDifficulty, setRecipeDifficulty] = useState("easy");
 
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingredient, setIngredient] = useState("");
@@ -38,11 +39,19 @@ const CreateRecipe = () => {
   };
 
   const addIngredient = () => {
+    if (ingredient.length <= 0) {
+      toast({ title: "No ingredient", variant: "fail" });
+      return;
+    }
     setIngredients([...ingredients, ingredient]);
     setIngredient("");
   };
 
   const addInstruction = () => {
+    if (instruction.length <= 0) {
+      toast({ title: "No instruction", variant: "fail" });
+      return;
+    }
     setInstructions([...instructions, instruction]);
     setInstruction("");
   };
@@ -80,6 +89,22 @@ const CreateRecipe = () => {
   console.log(ingredients);
 
   const submitRecipe = async () => {
+    if (
+      !recipeName.trim() ||
+      !recipeDescription.trim() ||
+      prepTime === 0 ||
+      !recipeDifficulty.trim() ||
+      ingredients.length === 0 ||
+      instructions.length === 0 ||
+      tags.length === 0
+    ) {
+      toast({
+        title: "Please fill in all fields",
+        variant: "fail",
+      });
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("file", file || "");
@@ -129,20 +154,20 @@ const CreateRecipe = () => {
   return (
     <>
       <Navbar />
-      <div className="h-screen flex flex-col mt-5 w-11/12 mx-auto">
-        <div className="flex flex-col gap-5">
-          <p className="flex text-lg flex-wrap">
-            {tags.map((tag) => (
-              <span className="bg-red-500 ml-2 p-[6px] rounded text-center inline-block">
-                {tag}
-              </span>
-            ))}
-          </p>
-          <div className="flex flex-col gap-1">
+      <p className="flex text-lg flex-wrap w-11/12 mx-auto mt-4">
+        {tags.map((tag) => (
+          <span className="bg-violet-50 ml-2 p-[6px] rounded text-center inline-block">
+            {tag}
+          </span>
+        ))}
+      </p>
+      <div className="flex flex-col mt-5 w-11/12 mx-auto md:flex-row md:gap-10 max-w-[400px] md:max-w-full">
+        <div className="flex flex-col gap-5 md:w-1/2 md:gap-8">
+          <div className="flex flex-col">
             <label className="text-lg">Recipe name</label>
             <input
               type="text"
-              className="border rounded p-1"
+              className="border rounded p-1 md:p-2"
               onChange={(e) => setRecipeName(e.target.value)}
               value={recipeName}
             />
@@ -150,7 +175,7 @@ const CreateRecipe = () => {
           <div className="flex flex-col">
             <label className="text-lg">Description</label>
             <textarea
-              className="border resize-none h-[150px]"
+              className="border resize-none h-[150px] p-1"
               onChange={(e) => setRecipeDescription(e.target.value)}
               value={recipeDescription}
             ></textarea>
@@ -159,18 +184,20 @@ const CreateRecipe = () => {
             <label className="text-lg">Prep Time</label>
             <input
               type="number"
-              className="border w-1/2"
+              className="border rounded w-1/2 p-1 md:p-2"
               onChange={(e) => setPrepTime(parseInt(e.target.value))}
               value={prepTime}
+              min="0"
             />
           </div>
           <div className="flex gap-2">
             <label className="text-lg">Cook time</label>
             <input
               type="number"
-              className="border w-1/2"
+              className="border rounded w-1/2 p-1 md:p-2"
               onChange={(e) => setCookTime(parseInt(e.target.value))}
               value={cookTime}
+              min="0"
             />
           </div>
           <div className="flex gap-2">
@@ -178,7 +205,7 @@ const CreateRecipe = () => {
             <select
               name="recipeDifficulty"
               onChange={(e) => setRecipeDifficulty(e.target.value)}
-              className="p-1 rounded bg-red-500"
+              className="p-1 rounded text-violet-700 bg-violet-50 font-medium md:p-2"
               value={recipeDifficulty}
             >
               <option value="easy">Easy</option>
@@ -187,34 +214,34 @@ const CreateRecipe = () => {
             </select>
           </div>
         </div>
-        <div className="flex flex-col gap-5 mt-5">
+        <div className="flex flex-col gap-5 mt-5 md:w-1/2 md:mt-0 md:gap-8">
           <div className="flex flex-col">
-            <div>
+            <div className="md:flex md:flex-col">
               <label className="text-lg">Ingredients</label>
-              <input
-                type="text"
-                className="border p-1"
-                value={ingredient}
-                onChange={(e) => handleIngredientInput(e)}
-              />
-              <button
-                className="bg-gray-200 ml-4 p-1 rounded w-[50px]"
-                onClick={addIngredient}
-              >
-                Add
-              </button>
+              <div>
+                <input
+                  type="text"
+                  className="border rounded p-1 md:p-2 w-1/2"
+                  value={ingredient}
+                  onChange={(e) => handleIngredientInput(e)}
+                />
+                <button
+                  className="bg-violet-50 ml-4 p-1 rounded w-[50px] inline"
+                  onClick={addIngredient}
+                >
+                  Add
+                </button>
+              </div>
             </div>
-            <div>
+            <div className={ingredients.length <= 0 ? "hidden" : ""}>
               <ul>
                 {ingredients.map((ingredient, index) => (
-                  <li key={index} className="list-disc ml-8 mt-4 w-[200px]">
+                  <li
+                    key={index}
+                    onClick={() => removeIngredient(index)}
+                    className="list-disc ml-8 mt-4 flex items-center bg-violet-50 hover:bg-violet-100 w-fit p-2 rounded text-violet-500 cursor-pointer"
+                  >
                     {ingredient}
-                    <span
-                      className="ml-2 p-1 border"
-                      onClick={() => removeIngredient(index)}
-                    >
-                      X
-                    </span>
                   </li>
                 ))}
               </ul>
@@ -231,13 +258,13 @@ const CreateRecipe = () => {
               ></textarea>
               <div className="flex gap-2">
                 <button
-                  className="bg-gray-200 mt-2 p-1 rounded w-[50px]"
+                  className="bg-violet-50 mt-2 p-1 rounded w-[50px]"
                   onClick={addInstruction}
                 >
                   Add
                 </button>
                 <button
-                  className="bg-gray-200 mt-2 p-1 rounded w-[50px]"
+                  className="bg-violet-50 mt-2 p-1 rounded w-[50px]"
                   onClick={removeLastInstruction}
                 >
                   Undo
@@ -248,7 +275,7 @@ const CreateRecipe = () => {
               <div className="border rounded mt-2 p-1 h-[300px] overflow-auto">
                 {instructions.length > 0 &&
                   instructions.map((inst, index) => (
-                    <div key={index}>
+                    <div key={index} className="p-1">
                       <h1 className="font-medium text-lg">Step: {index + 1}</h1>
                       <p className="text-md">{inst}</p>
                     </div>
@@ -261,12 +288,12 @@ const CreateRecipe = () => {
               <label>Tags</label>
               <input
                 type="text"
-                className="border w-1/2 p-1"
+                className="border rounded w-1/2 p-1"
                 value={tag}
                 onChange={(e) => setTag(e.target.value)}
               />
               <button
-                className="bg-green-200 p-1 rounded w-[50px]"
+                className="bg-violet-50 p-1 rounded w-[50px]"
                 onClick={addTag}
               >
                 Add
@@ -286,10 +313,10 @@ const CreateRecipe = () => {
             />
           </div>
           <button
-            className="mt-1 mb-4 rounded bg-red-500 w-1/2 mx-auto p-1 text-md"
+            className="mt-1 mb-4 rounded bg-violet-500 hover:bg-violet-600 text-violet-50 font-medium w-[150px] mx-auto p-1 text-md"
             onClick={submitRecipe}
           >
-            Submit
+            Create recipe
           </button>
         </div>
       </div>

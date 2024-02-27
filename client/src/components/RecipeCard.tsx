@@ -4,38 +4,15 @@ import { useEffect, useState } from "react";
 
 const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
   const navigate = useNavigate();
-  const [maxTitleLength, setMaxTitleLength] = useState(50);
 
   let difficultyColor = "";
   const recipeTime = parseInt(recipe.prepTime) + parseInt(recipe.cookTime);
 
-  // let maxTitleLength = 50;
-
-  // if (window.innerWidth <= 768) {
-  //   maxTitleLength = 22; // Adjust this value as needed
-  // }
-
-  useEffect(() => {
-    const handleResize = () => {
-      // Adjust maxTitleLength based on window width
-      setMaxTitleLength(window.innerWidth <= 1024 ? 32 : 50);
-    };
-
-    // Set maxTitleLength on mount
-    handleResize();
-
-    // Attach event listener for window resize
-    window.addEventListener("resize", handleResize);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const MAX_TITLE_LENGTH = 30;
 
   const truncatedTitle =
-    recipe.name.length > maxTitleLength
-      ? `${recipe.name.slice(0, maxTitleLength)}...`
+    recipe.name.length > MAX_TITLE_LENGTH
+      ? `${recipe.name.slice(0, MAX_TITLE_LENGTH)}...`
       : recipe.name;
 
   switch (recipe.difficulty.toLowerCase()) {
@@ -58,9 +35,9 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
       <img src={recipe.image} alt="" className="w-full h-1/2" />
       <div className="w-11/12 h-1/2 my-0 mx-auto">
         <p className="my-2">{recipeTime} mins</p>
-        <ul className="flex gap-2 mt-1 md:mt-3">
+        <ul className="flex gap-2 mt-1 md:mt-3 flex-wrap">
           {recipe.tags.map((tag: string, index: number) => (
-            <li key={index} className="bg-red-500 w-12 md:w-16 rounded">
+            <li key={index} className="bg-red-500 p-1 rounded">
               <p className="text-center font font-medium text-sm md:text-lg">
                 {tag}
               </p>
