@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
+import { useCookies } from "react-cookie";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
+  const [cookie, setCookies, removeCookie] = useCookies();
 
   const handleNav = () => {
     setNav(!nav);
@@ -73,12 +75,18 @@ const Navbar = () => {
           <li>
             <Link to="/recipes/create-recipe/">Add Recipe</Link>
           </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
+          {cookie.token ? (
+            <button onClick={() => removeCookie("token")}>Logout</button>
+          ) : (
+            <>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>
