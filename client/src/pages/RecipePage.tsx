@@ -6,9 +6,12 @@ import { StepInterface } from "@/types/StepInterface";
 import RecipeCard from "@/components/RecipeCard";
 import Navbar from "@/components/Navbar";
 import { Recipe } from "@/types/RecipeInterface";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const [cookie, setCookies] = useCookies();
 
   const navigate = useNavigate();
 
@@ -28,6 +31,12 @@ const RecipePage: React.FC = () => {
     return <p>Error fetching data: {error.message}</p>;
   }
 
+  const decodedToken = cookie.token ? jwtDecode(cookie.token) : null;
+
+  const isSameUser =
+    decodedToken && decodedToken.username === data.user.username;
+  console.log(isSameUser);
+
   console.log(data);
 
   return (
@@ -39,6 +48,12 @@ const RecipePage: React.FC = () => {
             <h1 className="w-11/12 mx-auto md:mx-0 text-3xl md:text-4xl lg:text-5xl font-medium my-6">
               {data.name}
             </h1>
+            <button
+              onClick={() => navigate(`/recipes/edit/${data.slug}`)}
+              className={`${isSameUser ? "" : "hidden"} w-[100px] bg-violet-50`}
+            >
+              Edit
+            </button>
             <img
               src={data.image}
               alt=""

@@ -1,13 +1,15 @@
 import Navbar from "@/components/Navbar";
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { FaTimes } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
-const CreateRecipe = () => {
+const CreateRecipe = ({ mode }) => {
   const MAX_CHAR_LENGTH = 50;
   const { toast } = useToast();
+  const { slug } = useParams();
 
   const [cookie, setCookies] = useCookies();
 
@@ -29,6 +31,41 @@ const CreateRecipe = () => {
   const [tags, setTags] = useState<string[]>([]);
 
   const [file, setFile] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/recipes/${slug}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          }
+        );
+
+        const { data } = response;
+        console.log("FETCHED RECIPE FROM SLUG:", data);
+
+        // Set state with the fetched data
+        setRecipeName(data.name);
+        setRecipeDescription(data.description);
+        setPrepTime(data.prepTime);
+        setCookTime(data.cookTime);
+        setRecipeDifficulty(data.difficulty);
+        setIngredients(data.ingredients);
+        setInstructions(data.steps.map((step) => step.instruction));
+        setTags(data.tags);
+      } catch (error) {
+        console.error("Error fetching recipe data", error);
+      }
+    };
+
+    // Only fetch data in edit mode and when a slug is provided
+    if (mode === "edit" && slug) {
+      fetchData();
+    }
+  }, [mode, slug, cookie.token]);
 
   const handleIngredientInput = (e) => {
     if (e.target.value.length <= MAX_CHAR_LENGTH) {
@@ -62,6 +99,12 @@ const CreateRecipe = () => {
     setInstructions(updatedInstructions);
   };
 
+  const removeIngredient = (index: number) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients.splice(index, 1);
+    setIngredients(updatedIngredients);
+  };
+
   const addTag = () => {
     const trimmedTag = tag.trim();
 
@@ -86,7 +129,8 @@ const CreateRecipe = () => {
     }
   };
 
-  console.log(ingredients);
+  console.log("INGREDIENTS:", ingredients);
+  console.log("STEPS:", instructions);
 
   const submitRecipe = async () => {
     if (
@@ -127,28 +171,31 @@ const CreateRecipe = () => {
     console.log(formData);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/recipes",
-        formData,
-        {
+      let response;
+      if (mode === "create") {
+        response = await axios.post("http://localhost:3000/recipes", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${cookie.token}`,
           },
-        }
-      );
+        });
+      } else if (mode === "edit") {
+        response = await axios.put(
+          `http://localhost:3000/recipes/${slug}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          }
+        );
+      }
 
       console.log("Recipe submitted successfully", response.data);
     } catch (error) {
       console.error("Error submitting recipe", error);
     }
-  };
-
-  const removeIngredient = (index: number) => {
-    const updatedIngredients = [...ingredients];
-    console.log(updatedIngredients[index]);
-    updatedIngredients.splice(index, 1);
-    setIngredients(updatedIngredients);
   };
 
   return (

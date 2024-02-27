@@ -24,7 +24,14 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/:slug" element={<RecipePage />} />
               <Route path="/users/:username" element={<UserProfile />} />
-              <Route path="/recipes/create-recipe" element={<CreateRecipe />} />
+              <Route
+                path="/recipes/create-recipe"
+                element={<CreateRecipe mode="create" />}
+              />
+              <Route
+                path="/recipes/edit/:slug"
+                element={<CreateRecipe mode="edit" />}
+              />
             </Routes>
           </Router>
           <Toaster />

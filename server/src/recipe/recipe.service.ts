@@ -143,22 +143,55 @@ export class RecipeService {
     return await this.recipeRepository.delete({ slug });
   }
 
-  async updateRecipe(currentUserId: number, slug: string, updateRecipeDto: UpdateRecipeDto) {
-    const recipe = await this.recipeRepository.findOne({ where: { slug } });
+  async updateRecipe(
+    currentUserId: number,
+    slug: string,
+    updateRecipeDto: UpdateRecipeDto,
+    fileName?: string,
+    file?: Buffer,
+  ): Promise<RecipeEntity> {
+    const user = await this.userRepository.findOne({ where: { id: currentUserId } });
 
-    if (!recipe) {
-      throw new HttpException('No recipe found', HttpStatus.NOT_FOUND);
+    if (!user) {
+      throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
     }
 
-    if (recipe.user.id !== currentUserId) {
-      throw new HttpException('You are not the recipe owner', HttpStatus.FORBIDDEN);
+    const existingRecipe = await this.recipeRepository.findOne({
+      where: { slug: slug, user: { id: currentUserId } },
+      relations: ['steps'],
+    });
+
+    if (!existingRecipe) {
+      throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
     }
 
-    Object.assign(recipe, updateRecipeDto);
+    Object.assign(existingRecipe, updateRecipeDto);
 
-    recipe.slug = slugify(recipe.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+    if (file && fileName) {
+      await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipiebucket', Key: fileName, Body: file }));
+      existingRecipe.image = `https://recipiebucket.s3.amazonaws.com/${fileName}`;
+    }
 
-    return await this.recipeRepository.save(recipe);
+    const updatedSteps = updateRecipeDto.steps.map((stepInstruction, index) =>
+      this.stepRepository.create({
+        instruction: stepInstruction,
+        stepNumber: index + 1,
+        recipe: existingRecipe,
+      }),
+    );
+
+    const savedSteps = await this.stepRepository.save(updatedSteps);
+
+    existingRecipe.steps = savedSteps;
+
+    if (updateRecipeDto.name) {
+      existingRecipe.slug =
+        slugify(updateRecipeDto.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+    }
+
+    const updatedRecipe = await this.recipeRepository.save(existingRecipe);
+
+    return updatedRecipe;
   }
 
   async addRecipeToFavorites(slug: string, currentUserId: number) {

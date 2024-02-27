@@ -66,14 +66,29 @@ export class RecipeController {
     return this.recipeService.deleteRecipe(currentUserId, slug);
   }
 
-  @Put(':slug')
+  @Put(':slug') // Assuming you have a route parameter for the recipe ID
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileInterceptor('file'))
   async updateRecipe(
     @User('id') currentUserId: number,
+    @Param('id') slug: string,
     @Body() updateRecipeDto: UpdateRecipeDto,
-    @Param('slug') slug: string,
-  ) {
+    @UploadedFile(
+      new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }),
+    )
+    file: Express.Multer.File,
+  ): Promise<RecipeEntity> {
+    if (file) {
+      return await this.recipeService.updateRecipe(
+        currentUserId,
+        slug,
+        updateRecipeDto,
+        file.originalname,
+        file.buffer,
+      );
+    }
+
     return await this.recipeService.updateRecipe(currentUserId, slug, updateRecipeDto);
   }
 
