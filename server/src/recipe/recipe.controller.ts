@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseFilePipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -72,7 +73,7 @@ export class RecipeController {
   @UseInterceptors(FileInterceptor('file'))
   async updateRecipe(
     @User('id') currentUserId: number,
-    @Param('id') slug: string,
+    @Param('slug') slug: string,
     @Body() updateRecipeDto: UpdateRecipeDto,
     @UploadedFile(
       new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }),
