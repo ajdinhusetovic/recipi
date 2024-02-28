@@ -3,7 +3,6 @@ import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { FaTimes } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 const CreateRecipe = ({ mode }) => {
@@ -32,6 +31,10 @@ const CreateRecipe = ({ mode }) => {
 
   const [file, setFile] = useState();
 
+  const [fetchedSlug, setFetchedSlug] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +48,11 @@ const CreateRecipe = ({ mode }) => {
         );
 
         const { data } = response;
+
         console.log("FETCHED RECIPE FROM SLUG:", data);
+
+        // Set state with the fetched data
+        setFetchedSlug(data.slug); // Store the fetched slug in state
 
         // Set state with the fetched data
         setRecipeName(data.name);
@@ -133,20 +140,24 @@ const CreateRecipe = ({ mode }) => {
   console.log("STEPS:", instructions);
 
   const submitRecipe = async () => {
-    if (
-      !recipeName.trim() ||
-      !recipeDescription.trim() ||
-      prepTime === 0 ||
-      !recipeDifficulty.trim() ||
-      ingredients.length === 0 ||
-      instructions.length === 0 ||
-      tags.length === 0
-    ) {
-      toast({
-        title: "Please fill in all fields",
-        variant: "fail",
-      });
-      return;
+    console.log("Before submission - fetchedSlug:", fetchedSlug);
+
+    if (mode === "create") {
+      if (
+        !recipeName.trim() ||
+        !recipeDescription.trim() ||
+        prepTime === 0 ||
+        !recipeDifficulty.trim() ||
+        ingredients.length === 0 ||
+        instructions.length === 0 ||
+        tags.length === 0
+      ) {
+        toast({
+          title: "Please fill in all fields",
+          variant: "fail",
+        });
+        return;
+      }
     }
 
     const formData = new FormData();
@@ -168,9 +179,10 @@ const CreateRecipe = ({ mode }) => {
       formData.append(`tags[${index}]`, tag);
     });
 
-    console.log(formData);
+    console.log("Form data:", formData);
 
     try {
+      setLoading(true);
       let response;
       if (mode === "create") {
         response = await axios.post("http://localhost:3000/recipes", formData, {
@@ -191,10 +203,15 @@ const CreateRecipe = ({ mode }) => {
           }
         );
       }
-
+      console.log(uploadProgress);
       console.log("Recipe submitted successfully", response.data);
     } catch (error) {
       console.error("Error submitting recipe", error);
+      console.log("After submission - fetchedSlug:", fetchedSlug);
+    } finally {
+      setLoading(false);
+      setUploadProgress(0);
+      console.log(loading);
     }
   };
 
@@ -366,6 +383,27 @@ const CreateRecipe = ({ mode }) => {
             Create recipe
           </button>
         </div>
+        {loading && (
+          <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center bg-black bg-opacity-50 z-50">
+            <svg
+              className="animate-spin "
+              fill="none"
+              height="48"
+              viewBox="0 0 48 48"
+              width="48"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4"
+                stroke="violet"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="4"
+              />
+            </svg>
+            <h1 className="text-violet-50 mt-2">Submitting recipe...</h1>
+          </div>
+        )}
       </div>
     </>
   );

@@ -6,21 +6,21 @@ import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 
 const Recipes = () => {
-  const cachedDataString = localStorage.getItem("recipes");
-  let cachedData;
+  // const cachedDataString = localStorage.getItem("recipes");
+  // let cachedData;
 
-  if (cachedDataString) {
-    cachedData = JSON.parse(cachedDataString);
-  } else {
-    console.log("No data in local storage");
-  }
+  // if (cachedDataString) {
+  //   cachedData = JSON.parse(cachedDataString);
+  // } else {
+  //   console.log("No data in local storage");
+  // }
 
   const fetchRecipeData = async () => {
     try {
       const response = await axios.get("http://localhost:3000/recipes");
       const recipes = response.data.recipes;
 
-      localStorage.setItem("recipes", JSON.stringify(recipes));
+      // localStorage.setItem("recipes", JSON.stringify(recipes));
 
       return recipes;
     } catch (error) {
@@ -29,7 +29,7 @@ const Recipes = () => {
     }
   };
 
-  const { isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["recipes"],
     queryFn: fetchRecipeData,
   });
@@ -37,6 +37,8 @@ const Recipes = () => {
   useEffect(() => {
     fetchRecipeData();
   }, []);
+
+  console.log(data);
 
   return (
     <>
@@ -48,8 +50,8 @@ const Recipes = () => {
           <p>Error fetching data: {error.message}</p>
         ) : (
           <div className="p-10 flex gap-12 flex-col lg:flex-row lg:flex-wrap">
-            {cachedData &&
-              cachedData.map((recipe: Recipe) => (
+            {data &&
+              data.map((recipe: Recipe) => (
                 <RecipeCard recipe={recipe} key={recipe.id} />
               ))}
           </div>
