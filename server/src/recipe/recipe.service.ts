@@ -184,11 +184,9 @@ export class RecipeService {
 
     existingRecipe.steps = savedSteps;
 
-    if (updateRecipeDto.name && updateRecipeDto.name !== existingRecipe.name) {
+    if (updateRecipeDto.name) {
       existingRecipe.slug =
         slugify(updateRecipeDto.name, { lower: true }) + '-' + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
-    } else if (updateRecipeDto.name === existingRecipe.name && slug) {
-      existingRecipe.slug = slug;
     }
 
     const updatedRecipe = await this.recipeRepository.save(existingRecipe);
