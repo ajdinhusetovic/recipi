@@ -72,10 +72,10 @@ const Navbar = () => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="recipes/following">My Following</Link>
+            <Link to="recipes/search">Search</Link>
           </li>
           <li>
-            <Link to="/recipes/create-recipe/">Add Recipe</Link>
+            <Link to="recipes/create-recipe/">Add Recipe</Link>
           </li>
           {cookie.token ? (
             <button onClick={() => removeCookie("token")}>Logout</button>

@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import { CookiesProvider } from "react-cookie";
 import UserProfile from "./pages/UserProfile";
 import CreateRecipe from "./pages/CreateRecipe";
+import Search from "./pages/Search";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function App() {
                 path="/recipes/edit/:slug"
                 element={<CreateRecipe mode="edit" />}
               />
+              <Route path="/recipes/search" element={<Search />} />
             </Routes>
           </Router>
           <Toaster />
