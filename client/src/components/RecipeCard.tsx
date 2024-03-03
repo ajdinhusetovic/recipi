@@ -37,8 +37,8 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
         <p className="my-2">{recipeTime} mins</p>
         <ul className="flex gap-2 mt-1 md:mt-3 flex-wrap">
           {recipe.tags.map((tag: string, index: number) => (
-            <li key={index} className="bg-red-500 p-1 rounded">
-              <p className="text-center font font-medium text-sm md:text-lg">
+            <li key={index} className="bg-violet-50 p-1 rounded">
+              <p className="text-center text-violet-500 font font-medium text-sm md:text-lg">
                 {tag}
               </p>
             </li>

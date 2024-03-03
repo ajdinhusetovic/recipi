@@ -49,7 +49,7 @@ const Recipes = () => {
         ) : error ? (
           <p>Error fetching data: {error.message}</p>
         ) : (
-          <div className="p-10 flex gap-12 flex-col lg:flex-row lg:flex-wrap">
+          <div className="py-10 md:w-11/12 mx-auto flex flex-col gap-8 items-center justify-center md:flex-row md:flex-wrap lg:justify-normal">
             {data &&
               data.map((recipe: Recipe) => (
                 <RecipeCard recipe={recipe} key={recipe.id} />
