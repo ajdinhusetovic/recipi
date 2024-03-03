@@ -40,7 +40,7 @@ const Navbar = () => {
       <div className="flex justify-between h-full w-11/12 mx-auto">
         <div
           className={`flex justify-between items-center h-full ${
-            nav ? "" : "w-full md:w-1/2"
+            nav ? "" : "w-full md:w-1/3"
           }`}
         >
           {nav ? "" : <h1 className="items-self-center text-4xl">LOGO</h1>}
