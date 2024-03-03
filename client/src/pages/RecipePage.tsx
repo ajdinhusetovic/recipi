@@ -39,6 +39,17 @@ const RecipePage: React.FC = () => {
 
   console.log(data);
 
+  const deleteRecipe = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/recipes/${slug}`, {
+        headers: { Authorization: `Bearer ${cookie.token}` },
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -58,14 +69,24 @@ const RecipePage: React.FC = () => {
                   {data.user.username}
                 </span>
               </p>
-              <button
-                onClick={() => navigate(`/recipes/edit/${data.slug}`)}
-                className={`${
-                  isSameUser ? "" : "hidden"
-                } w-[100px] bg-violet-50 mb-3 mt-1 rounded text-violet-500`}
-              >
-                Edit
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => navigate(`/recipes/edit/${data.slug}`)}
+                  className={`${
+                    isSameUser ? "" : "hidden"
+                  } w-[100px] bg-violet-50 mb-3 mt-1 rounded text-violet-500`}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={deleteRecipe}
+                  className={`${
+                    isSameUser ? "" : "hidden"
+                  } w-[100px] bg-violet-50 mb-3 mt-1 rounded text-violet-500`}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
             <img
               src={data.image}
