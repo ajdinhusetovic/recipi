@@ -31,14 +31,14 @@ export class RecipeController {
     return await this.recipeService.getAllRecipes();
   }
 
+  @Get('search')
+  async searchRecipesAndUsers(@Query('query') query: string) {
+    return await this.recipeService.searchRecipesAndUsers(query);
+  }
+
   @Get(':slug')
   async getRecipe(@Param('slug') slug: string) {
     return await this.recipeService.getRecipe(slug);
-  }
-
-  @Get('feed')
-  async getFeed(@User('id') currentUserId: number, @Query() query: any) {
-    return await this.recipeService.getFeed(currentUserId, query);
   }
 
   @Post()
@@ -66,7 +66,7 @@ export class RecipeController {
     return this.recipeService.deleteRecipe(currentUserId, slug);
   }
 
-  @Put(':slug') // Assuming you have a route parameter for the recipe ID
+  @Put(':slug')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(FileInterceptor('file'))

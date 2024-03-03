@@ -49,22 +49,6 @@ export class RecipeService {
     return recipe;
   }
 
-  async getFeed(currentUserId: number, query: any) {
-    const queryBuilder = this.dataSource
-      .getRepository(RecipeEntity)
-      .createQueryBuilder('recipes')
-      .leftJoinAndSelect('recipes.user', 'user');
-
-    if (query.limit) {
-      queryBuilder.limit(query.limit);
-    }
-
-    const recipes = await queryBuilder.getMany();
-    const recipesCount = await queryBuilder.getCount();
-
-    return { recipesCount, recipes };
-  }
-
   async createRecipe(
     currentUserId: number,
     createRecipeDto: CreateRecipeDto,
@@ -226,5 +210,25 @@ export class RecipeService {
     }
 
     return recipe;
+  }
+
+  async searchRecipesAndUsers(query: string) {
+    console.log('Search');
+    const userResults = await this.userRepository.find({
+      where: {
+        username: ILike(`%${query}%`),
+      },
+    });
+
+    const recipeResults = await this.recipeRepository.find({
+      where: {
+        name: ILike(`%${query}%`),
+      },
+    });
+
+    return {
+      users: userResults,
+      recipes: recipeResults,
+    };
   }
 }
