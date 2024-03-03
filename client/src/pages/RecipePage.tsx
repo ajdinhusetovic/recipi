@@ -45,20 +45,33 @@ const RecipePage: React.FC = () => {
       <div className="w-full">
         <div className="md:w-8/12 md:my-0 md:mx-auto flex flex-col">
           <div className="lg:w-7/12 flex flex-col">
-            <h1 className="w-11/12 mx-auto md:mx-0 text-3xl md:text-4xl lg:text-5xl font-medium my-6">
-              {data.name}
-            </h1>
-            <button
-              onClick={() => navigate(`/recipes/edit/${data.slug}`)}
-              className={`${isSameUser ? "" : "hidden"} w-[100px] bg-violet-50`}
-            >
-              Edit
-            </button>
+            <div className="w-11/12 mx-auto ">
+              <h1 className="md:mx-0 text-3xl md:text-4xl lg:text-5xl font-medium my-6">
+                {data.name}
+              </h1>
+              <p className="mb-3 md:pr-0 text-sm md:text-base">
+                Recipe created by{" "}
+                <span
+                  className="text-red-500 underline cursor-pointer"
+                  onClick={() => navigate(`/users/${data.user.username}`)}
+                >
+                  {data.user.username}
+                </span>
+              </p>
+              <button
+                onClick={() => navigate(`/recipes/edit/${data.slug}`)}
+                className={`${
+                  isSameUser ? "" : "hidden"
+                } w-[100px] bg-violet-50 mb-3 mt-1 rounded text-violet-500`}
+              >
+                Edit
+              </button>
+            </div>
             <img
               src={data.image}
               alt=""
               width={700}
-              className="float-left justify-self-start"
+              className="float-left justify-self-start w-11/12 mx-auto"
             />
             <div className="w-11/12 mx-auto md:w-full mt-4">
               <p className="text-lg">{data.description}</p>
@@ -84,27 +97,22 @@ const RecipePage: React.FC = () => {
                 </div>
               ))}
             </div>
-            <p className="self-end mb-5 pr-3 md:pr-0">
-              Recipe created by{" "}
-              <span
-                className="text-red-500 underline cursor-pointer"
-                onClick={() => navigate(`/users/${data.user.username}`)}
-              >
-                {data.user.username}
-              </span>
-            </p>
           </div>
         </div>
-        <div className="mt-5">
-          <div>
-            <h1 className="text-3xl text-center">You might also like</h1>
-            <div className="w-11/12 mx-auto flex flex-col justify-center items-center my-8 gap-4 md:flex-row md:flex-wrap">
-              {data.similarRecipes.map((recipe: Recipe) => (
-                <RecipeCard recipe={recipe} />
-              ))}
+        {data.similarRecipes ? (
+          ""
+        ) : (
+          <div className="mt-5">
+            <div>
+              <h1 className="text-3xl text-center">You might also like</h1>
+              <div className="w-11/12 mx-auto flex flex-col justify-center items-center my-8 gap-4 md:flex-row md:flex-wrap">
+                {data.similarRecipes.map((recipe: Recipe) => (
+                  <RecipeCard recipe={recipe} />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
