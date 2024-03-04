@@ -35,6 +35,11 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    removeCookie("token");
+    window.location.reload();
+  };
+
   return (
     <nav className={`w-full ${nav ? "" : "h-[100px] md:h-[150px]"} border-b`}>
       <div className="flex justify-between h-full w-11/12 mx-auto">
@@ -78,7 +83,7 @@ const Navbar = () => {
             <Link to="/recipes/create-recipe/">Add Recipe</Link>
           </li>
           {cookie.token ? (
-            <button onClick={() => removeCookie("token")}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           ) : (
             <>
               <li>
