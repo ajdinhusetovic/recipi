@@ -71,7 +71,22 @@ export class UserController {
   @Put('user')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
-  async updateUser(@User('id') currentUserId: number, @Body() updateUserDto: UpdateUserDto) {
+  @UseInterceptors(FileInterceptor('file'))
+  async updateUser(
+    @User('id') currentUserId: number,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile(
+      new ParseFilePipe({ validators: [new FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }),
+    )
+    file: Express.Multer.File,
+  ) {
+    console.log(file);
+
+    if (file) {
+      const user = await this.userService.updateUser(currentUserId, updateUserDto, file.originalname, file.buffer);
+      return this.userService.buildUserResponse(user);
+    }
+
     const user = await this.userService.updateUser(currentUserId, updateUserDto);
     return this.userService.buildUserResponse(user);
   }

@@ -107,14 +107,23 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async updateUser(currentUserId: number, updateUserDto: UpdateUserDto) {
+  async updateUser(currentUserId: number, updateUserDto: UpdateUserDto, fileName?: string, file?: Buffer) {
     let user = await this.userRepository.findOne({ where: { id: currentUserId } });
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
+    if (user.email === updateUserDto.email || user.username === updateUserDto.username) {
+      throw new HttpException('Username taken', HttpStatus.CONFLICT);
+    }
+
     user = Object.assign(user, updateUserDto);
+
+    if (file && fileName) {
+      await this.s3Client.send(new PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
+      user.image = `https://recipieusers.s3.amazonaws.com/${fileName}`;
+    }
 
     return await this.userRepository.save(user);
   }

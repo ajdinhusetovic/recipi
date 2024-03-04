@@ -9,4 +9,7 @@ export class UpdateUserDto {
   @IsOptional()
   @MaxLength(300, { message: 'Bio should not be longer than 300 characters' })
   readonly bio: string;
+
+  @IsOptional()
+  readonly email: string;
 }
