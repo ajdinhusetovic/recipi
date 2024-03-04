@@ -214,9 +214,9 @@ export class RecipeService {
 
   async searchRecipesAndUsers(query: string) {
     console.log('Search');
-    const userResults = await this.userRepository.find({
+    const tagResults = await this.recipeRepository.find({
       where: {
-        username: ILike(`%${query}%`),
+        tags: ILike(`%${query}%`),
       },
     });
 
@@ -227,7 +227,7 @@ export class RecipeService {
     });
 
     return {
-      users: userResults,
+      tags: tagResults,
       recipes: recipeResults,
     };
   }
