@@ -203,14 +203,12 @@ const CreateRecipe = ({ mode }) => {
           }
         );
       }
-      console.log(uploadProgress);
       console.log("Recipe submitted successfully", response.data);
     } catch (error) {
       console.error("Error submitting recipe", error);
       console.log("After submission - fetchedSlug:", fetchedSlug);
     } finally {
       setLoading(false);
-      setUploadProgress(0);
       console.log(loading);
     }
   };
