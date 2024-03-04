@@ -6,8 +6,8 @@ import {
   Get,
   Param,
   ParseFilePipe,
+  Patch,
   Post,
-  Put,
   Req,
   UploadedFile,
   UseGuards,
@@ -68,7 +68,7 @@ export class UserController {
     return await this.userService.deleteCurrentUser(currentUserId);
   }
 
-  @Put('user')
+  @Patch('user')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(FileInterceptor('file'))
@@ -80,8 +80,6 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    console.log(file);
-
     if (file) {
       const user = await this.userService.updateUser(currentUserId, updateUserDto, file.originalname, file.buffer);
       return this.userService.buildUserResponse(user);
