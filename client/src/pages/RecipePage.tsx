@@ -32,11 +32,14 @@ const RecipePage: React.FC = () => {
     return <p>Error fetching data: {error.message}</p>;
   }
 
-  const decodedToken = cookie.token ? jwtDecode(cookie.token) : null;
+  let decodedToken;
+  let isSameUser;
+  if (cookie.token) {
+    decodedToken = cookie.token ? jwtDecode(cookie.token) : null;
 
-  const isSameUser =
-    decodedToken && decodedToken.username === data.user.username;
-  console.log(isSameUser);
+    isSameUser = decodedToken && decodedToken.username === data.user.username;
+    console.log(isSameUser);
+  }
 
   console.log(data);
 
