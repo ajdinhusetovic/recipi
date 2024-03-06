@@ -19,7 +19,9 @@ const RecipePage: React.FC = () => {
   const { isLoading, error, data } = useQuery({
     queryKey: ["recipes", slug],
     queryFn: async () => {
-      const response = await axios.get(`http://localhost:3000/recipes/${slug}`);
+      const response = await axios.get(
+        `https://recipie-api.onrender.com/recipes/${slug}`
+      );
       return response.data;
     },
   });
