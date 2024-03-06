@@ -10,7 +10,14 @@ export declare class RecipeController {
         results: number;
         recipes: RecipeEntity[];
     }>;
+    searchRecipesAndUsers(query: string): Promise<{
+        tags: RecipeEntity[];
+        recipes: RecipeEntity[];
+    }>;
+    getRecipe(slug: string): Promise<RecipeEntity>;
     createRecipe(currentUserId: number, createRecipeDto: CreateRecipeDto, file: Express.Multer.File): Promise<RecipeEntity>;
     deleteRecipe(currentUserId: number, slug: string): Promise<import("typeorm").DeleteResult>;
-    updateRecipe(currentUserId: number, updateRecipeDto: UpdateRecipeDto, slug: string): Promise<RecipeEntity>;
+    updateRecipe(currentUserId: number, slug: string, updateRecipeDto: UpdateRecipeDto, file: Express.Multer.File): Promise<RecipeEntity>;
+    addRecipeToFavorites(currentUserId: number, slug: string): Promise<RecipeEntity>;
+    removeRecipeFromFavorites(currentUserId: number, slug: string): Promise<RecipeEntity>;
 }

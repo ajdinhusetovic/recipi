@@ -15,16 +15,19 @@ class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(3, { message: 'Username should be at least 3 characters long. ' }),
+    (0, class_validator_1.MaxLength)(30, { message: 'Username should not be longer than 20 characters. ' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Username missing. ' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "username", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsEmail)({}, { message: 'Invalid email type. ' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Email missing. ' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(8, { message: 'Password should be at least 8 characters long' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password missing.' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 //# sourceMappingURL=CreateUserDto.js.map

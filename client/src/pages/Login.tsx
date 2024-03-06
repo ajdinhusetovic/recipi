@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import axios from "axios";
 import InputComponent from "@/components/InputComponent";
@@ -15,14 +16,17 @@ const Login = () => {
 
   const { toast } = useToast();
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/users/login", {
-        username: username,
-        password: password,
-      });
+      const response = await axios.post(
+        "https://recipie-api.onrender.com/users/login",
+        {
+          username: username,
+          password: password,
+        }
+      );
 
       console.log(response.data);
       const token = response.data.user.token;

@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Navbar from "@/components/Navbar";
 import { useToast } from "@/components/ui/use-toast";
+import { RecipeStep } from "@/types/StepInterface";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 
-const CreateRecipe = ({ mode }) => {
+interface CreateRecipeProps {
+  mode: "create" | "edit";
+}
+
+const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
   const MAX_CHAR_LENGTH = 50;
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -30,7 +36,7 @@ const CreateRecipe = ({ mode }) => {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<File | undefined>(undefined);
 
   const [fetchedSlug, setFetchedSlug] = useState("");
 
@@ -40,7 +46,7 @@ const CreateRecipe = ({ mode }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/recipes/${slug}`,
+          `https://recipie-api.onrender.com/recipes/${slug}`,
           {
             headers: {
               Authorization: `Bearer ${cookie.token}`,
@@ -59,7 +65,7 @@ const CreateRecipe = ({ mode }) => {
         setCookTime(data.cookTime);
         setRecipeDifficulty(data.difficulty);
         setIngredients(data.ingredients);
-        setInstructions(data.steps.map((step) => step.instruction));
+        setInstructions(data.steps.map((step: RecipeStep) => step.instruction));
         setTags(data.tags);
       } catch (error) {
         console.error("Error fetching recipe data", error);
@@ -71,7 +77,7 @@ const CreateRecipe = ({ mode }) => {
     }
   }, [mode, slug, cookie.token]);
 
-  const handleIngredientInput = (e) => {
+  const handleIngredientInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= MAX_CHAR_LENGTH) {
       setIngredient(e.target.value);
     } else {
@@ -192,15 +198,19 @@ const CreateRecipe = ({ mode }) => {
       setLoading(true);
       let response;
       if (mode === "create") {
-        response = await axios.post("http://localhost:3000/recipes", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${cookie.token}`,
-          },
-        });
+        response = await axios.post(
+          "https://recipie-api.onrender.com/recipes",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${cookie.token}`,
+            },
+          }
+        );
       } else if (mode === "edit") {
         response = await axios.put(
-          `http://localhost:3000/recipes/${slug}`,
+          `https://recipie-api.onrender.com/recipes/${slug}`,
           formData,
           {
             headers: {
@@ -210,7 +220,7 @@ const CreateRecipe = ({ mode }) => {
           }
         );
       }
-      console.log("Recipe submitted successfully", response.data);
+      console.log("Recipe submitted successfully", response?.data);
     } catch (error) {
       console.error("Error submitting recipe", error);
       console.log("After submission - fetchedSlug:", fetchedSlug);
@@ -382,7 +392,9 @@ const CreateRecipe = ({ mode }) => {
                         file:bg-violet-50 file:text-violet-700
                         hover:file:bg-violet-100"
               type="file"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                e.target.files && setFile(e.target.files[0])
+              }
             />
           </div>
           <button

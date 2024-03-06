@@ -15,11 +15,11 @@ class LogUserInDto {
 }
 exports.LogUserInDto = LogUserInDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Username is missing. ' }),
     __metadata("design:type", String)
 ], LogUserInDto.prototype, "username", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password is missing.' }),
     __metadata("design:type", String)
 ], LogUserInDto.prototype, "password", void 0);
 //# sourceMappingURL=LogUserInDto.js.map

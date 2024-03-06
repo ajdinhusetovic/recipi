@@ -42,10 +42,13 @@ let UserService = class UserService {
         if (createUserDto.password.length < 8) {
             throw new common_1.HttpException('Password too short', common_1.HttpStatus.BAD_REQUEST);
         }
-        const newUser = { ...createUserDto };
-        await this.s3Client.send(new client_s3_1.PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
-        const user = { ...newUser, image: `https://recipieusers.s3.amazonaws.com/${fileName}` };
-        return await this.userRepository.save(user);
+        const newUser = new user_entity_1.UserEntity();
+        Object.assign(newUser, createUserDto);
+        if (file && fileName) {
+            await this.s3Client.send(new client_s3_1.PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
+            newUser.image = `https://recipieusers.s3.amazonaws.com/${fileName}`;
+        }
+        return await this.userRepository.save(newUser);
     }
     async deleteCurrentUser(currentUserId) {
         const user = await this.userRepository.findOne({ where: { id: currentUserId } });
@@ -87,18 +90,39 @@ let UserService = class UserService {
     async getUserById(id) {
         return this.userRepository.findOne({ where: { id } });
     }
-    async updateUser(currentUserId, updateUserDto) {
+    async updateUser(currentUserId, updateUserDto, fileName, file) {
         let user = await this.userRepository.findOne({ where: { id: currentUserId } });
         if (!user) {
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         }
+        if (user.email === updateUserDto.email || user.username === updateUserDto.username) {
+            throw new common_1.HttpException('Username taken', common_1.HttpStatus.CONFLICT);
+        }
         user = Object.assign(user, updateUserDto);
+        if (file && fileName) {
+            await this.s3Client.send(new client_s3_1.PutObjectCommand({ Bucket: 'recipieusers', Key: fileName, Body: file }));
+            user.image = `https://recipieusers.s3.amazonaws.com/${fileName}`;
+        }
         return await this.userRepository.save(user);
     }
     async getAllUsers() {
         const users = await this.userRepository.find();
         const results = users.length;
         return { results, users };
+    }
+    async getCurrentUser(currentUserId) {
+        const user = await this.userRepository.findOne({ where: { id: currentUserId } });
+        if (!user) {
+            throw new common_1.HttpException('User not found!', common_1.HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
+    async getUserByUsername(username) {
+        const user = await this.userRepository.findOne({ where: { username }, relations: ['recipes', 'favorites'] });
+        if (!user) {
+            throw new common_1.HttpException('User not found!', common_1.HttpStatus.NOT_FOUND);
+        }
+        return user;
     }
 };
 exports.UserService = UserService;

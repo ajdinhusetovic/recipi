@@ -28,14 +28,27 @@ let UserController = class UserController {
     async getAllUsers() {
         return await this.userService.getAllUsers();
     }
+    async getCurrentUser(currentUserId) {
+        return await this.userService.getCurrentUser(currentUserId);
+    }
+    async getUserByUsername(username) {
+        return await this.userService.getUserByUsername(username);
+    }
     async createUser(createUserDto, file) {
         console.log(file);
-        return await this.userService.createUser(createUserDto, file.originalname, file.buffer);
+        if (file) {
+            return await this.userService.createUser(createUserDto, file.originalname, file.buffer);
+        }
+        return await this.userService.createUser(createUserDto);
     }
     async deleteCurrentUser(currentUserId) {
         return await this.userService.deleteCurrentUser(currentUserId);
     }
-    async updateUser(currentUserId, updateUserDto) {
+    async updateUser(currentUserId, updateUserDto, file) {
+        if (file) {
+            const user = await this.userService.updateUser(currentUserId, updateUserDto, file.originalname, file.buffer);
+            return this.userService.buildUserResponse(user);
+        }
         const user = await this.userService.updateUser(currentUserId, updateUserDto);
         return this.userService.buildUserResponse(user);
     }
@@ -56,11 +69,26 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getAllUsers", null);
 __decorate([
+    (0, common_1.Get)('me'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, user_decorator_1.User)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getCurrentUser", null);
+__decorate([
+    (0, common_1.Get)(':username'),
+    __param(0, (0, common_1.Param)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUserByUsername", null);
+__decorate([
     (0, common_1.Post)('register'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [new common_1.FileTypeValidator({ fileType: 'image/jpeg' })] }))),
+    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [new common_1.FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateUserDto_1.CreateUserDto, Object]),
     __metadata("design:returntype", Promise)
@@ -74,18 +102,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "deleteCurrentUser", null);
 __decorate([
-    (0, common_1.Put)('user'),
+    (0, common_1.Patch)('user'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, user_decorator_1.User)('id')),
-    __param(1, (0, common_1.Body)('user')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [new common_1.FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, UpdateUserDto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [Number, UpdateUserDto_1.UpdateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUser", null);
 __decorate([
     (0, common_1.Post)('login'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
-    __param(0, (0, common_1.Body)('user')),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [LogUserInDto_1.LogUserInDto]),
     __metadata("design:returntype", Promise)

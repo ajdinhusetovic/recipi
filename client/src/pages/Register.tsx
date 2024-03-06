@@ -8,18 +8,20 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
 
+  // const testUrl = "http://localhost:3000/users/register";
+  const url = "https://recipie-api.onrender.com/users/register";
+
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [errors, setErrors] = useState<string[]>([]);
 
   const { toast } = useToast();
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/users/register", {
+      await axios.post(url, {
         username: username,
         email: email,
         password: password,

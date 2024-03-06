@@ -1,12 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Recipe } from "@/types/RecipeInterface";
-import { useEffect, useState } from "react";
 
 const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
   const navigate = useNavigate();
 
   let difficultyColor = "";
-  const recipeTime = parseInt(recipe.prepTime) + parseInt(recipe.cookTime);
+  const recipeTime = recipe.prepTime + recipe.cookTime;
 
   const MAX_TITLE_LENGTH = 30;
 

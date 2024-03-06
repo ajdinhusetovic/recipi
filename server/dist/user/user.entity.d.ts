@@ -7,5 +7,6 @@ export declare class UserEntity {
     bio: string;
     image: string;
     recipes: RecipeEntity[];
+    favorites: RecipeEntity[];
     hashPassword(): Promise<void>;
 }

@@ -17,7 +17,9 @@ const Recipes = () => {
 
   const fetchRecipeData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/recipes");
+      const response = await axios.get(
+        "https://recipie-api.onrender.com/recipes"
+      );
       const recipes = response.data.recipes;
 
       // localStorage.setItem("recipes", JSON.stringify(recipes));

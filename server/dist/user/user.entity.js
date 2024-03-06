@@ -48,6 +48,11 @@ __decorate([
     __metadata("design:type", Array)
 ], UserEntity.prototype, "recipes", void 0);
 __decorate([
+    (0, typeorm_1.ManyToMany)(() => recipe_entity_1.RecipeEntity),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "favorites", void 0);
+__decorate([
     (0, typeorm_1.BeforeInsert)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

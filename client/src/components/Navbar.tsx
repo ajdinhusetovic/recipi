@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { BiLogOut } from "react-icons/bi";
-import { jwtDecode } from "jwt-decode";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+
+declare module "jwt-decode" {
+  interface JwtPayload {
+    username: string;
+  }
+}
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookie, setCookies, removeCookie] = useCookies();
 
   const handleNav = () => {
@@ -20,7 +27,7 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const decodedToken = cookie.token ? jwtDecode(cookie.token) : null;
+  const decodedToken = jwtDecode(cookie.token) as JwtPayload;
 
   console.log(decodedToken);
 

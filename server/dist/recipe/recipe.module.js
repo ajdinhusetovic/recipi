@@ -13,12 +13,13 @@ const recipe_entity_1 = require("./recipe.entity");
 const recipe_controller_1 = require("./recipe.controller");
 const recipe_service_1 = require("./recipe.service");
 const user_entity_1 = require("../user/user.entity");
+const step_entity_1 = require("../step/step.entity");
 let RecipeModule = class RecipeModule {
 };
 exports.RecipeModule = RecipeModule;
 exports.RecipeModule = RecipeModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([recipe_entity_1.RecipeEntity, user_entity_1.UserEntity])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([recipe_entity_1.RecipeEntity, user_entity_1.UserEntity, step_entity_1.StepEntity])],
         controllers: [recipe_controller_1.RecipeController],
         providers: [recipe_service_1.RecipeService],
     })

@@ -12,9 +12,11 @@ export declare class UserController {
     getAllUsers(): Promise<{
         users: UserEntity[];
     }>;
+    getCurrentUser(currentUserId: number): Promise<UserEntity>;
+    getUserByUsername(username: string): Promise<UserEntity>;
     createUser(createUserDto: CreateUserDto, file: Express.Multer.File): Promise<UserEntity>;
     deleteCurrentUser(currentUserId: number): Promise<import("typeorm").DeleteResult>;
-    updateUser(currentUserId: number, updateUserDto: UpdateUserDto): Promise<UserResponseInterface>;
+    updateUser(currentUserId: number, updateUserDto: UpdateUserDto, file: Express.Multer.File): Promise<UserResponseInterface>;
     logInUser(logUserInDto: LogUserInDto): Promise<UserResponseInterface>;
     currentUser(request: ExpressRequestInterface, userId: number): Promise<any>;
 }

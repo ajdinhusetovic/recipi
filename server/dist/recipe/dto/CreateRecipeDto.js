@@ -26,4 +26,8 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Array)
 ], CreateRecipeDto.prototype, "tags", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Array)
+], CreateRecipeDto.prototype, "steps", void 0);
 //# sourceMappingURL=CreateRecipeDto.js.map

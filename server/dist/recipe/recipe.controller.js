@@ -25,16 +25,34 @@ let RecipeController = class RecipeController {
         this.recipeService = recipeService;
     }
     async getAllRecipes() {
-        return this.recipeService.getAllRecipes();
+        return await this.recipeService.getAllRecipes();
+    }
+    async searchRecipesAndUsers(query) {
+        return await this.recipeService.searchRecipesAndUsers(query);
+    }
+    async getRecipe(slug) {
+        return await this.recipeService.getRecipe(slug);
     }
     async createRecipe(currentUserId, createRecipeDto, file) {
-        return await this.recipeService.createRecipe(currentUserId, createRecipeDto, file.originalname, file.buffer);
+        if (file) {
+            return await this.recipeService.createRecipe(currentUserId, createRecipeDto, file.originalname, file.buffer);
+        }
+        return await this.recipeService.createRecipe(currentUserId, createRecipeDto);
     }
     async deleteRecipe(currentUserId, slug) {
         return this.recipeService.deleteRecipe(currentUserId, slug);
     }
-    async updateRecipe(currentUserId, updateRecipeDto, slug) {
+    async updateRecipe(currentUserId, slug, updateRecipeDto, file) {
+        if (file) {
+            return await this.recipeService.updateRecipe(currentUserId, slug, updateRecipeDto, file.originalname, file.buffer);
+        }
         return await this.recipeService.updateRecipe(currentUserId, slug, updateRecipeDto);
+    }
+    async addRecipeToFavorites(currentUserId, slug) {
+        return await this.recipeService.addRecipeToFavorites(slug, currentUserId);
+    }
+    async removeRecipeFromFavorites(currentUserId, slug) {
+        return await this.recipeService.removeRecipeFromFavorites(slug, currentUserId);
     }
 };
 exports.RecipeController = RecipeController;
@@ -45,13 +63,27 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RecipeController.prototype, "getAllRecipes", null);
 __decorate([
+    (0, common_1.Get)('search'),
+    __param(0, (0, common_1.Query)('query')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RecipeController.prototype, "searchRecipesAndUsers", null);
+__decorate([
+    (0, common_1.Get)(':slug'),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RecipeController.prototype, "getRecipe", null);
+__decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, user_decorator_1.User)('id')),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [new common_1.FileTypeValidator({ fileType: 'image/jpeg' })] }))),
+    __param(2, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [new common_1.FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, CreateRecipeDto_1.CreateRecipeDto, Object]),
     __metadata("design:returntype", Promise)
@@ -69,13 +101,33 @@ __decorate([
     (0, common_1.Put)(':slug'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, user_decorator_1.User)('id')),
-    __param(1, (0, common_1.Body)('recipe')),
-    __param(2, (0, common_1.Param)('slug')),
+    __param(1, (0, common_1.Param)('slug')),
+    __param(2, (0, common_1.Body)()),
+    __param(3, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ validators: [new common_1.FileTypeValidator({ fileType: 'image/jpeg' })], fileIsRequired: false }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, UpdateRecipeDto_1.UpdateRecipeDto, String]),
+    __metadata("design:paramtypes", [Number, String, UpdateRecipeDto_1.UpdateRecipeDto, Object]),
     __metadata("design:returntype", Promise)
 ], RecipeController.prototype, "updateRecipe", null);
+__decorate([
+    (0, common_1.Post)(':slug/favorite'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, user_decorator_1.User)('id')),
+    __param(1, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", Promise)
+], RecipeController.prototype, "addRecipeToFavorites", null);
+__decorate([
+    (0, common_1.Delete)(':slug/favorite'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, user_decorator_1.User)('id')),
+    __param(1, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", Promise)
+], RecipeController.prototype, "removeRecipeFromFavorites", null);
 exports.RecipeController = RecipeController = __decorate([
     (0, common_1.Controller)('recipes'),
     __metadata("design:paramtypes", [recipe_service_1.RecipeService])

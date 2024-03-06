@@ -42,7 +42,7 @@ const RecipePage: React.FC = () => {
 
   const deleteRecipe = async () => {
     try {
-      await axios.delete(`http://localhost:3000/recipes/${slug}`, {
+      await axios.delete(`https://recipie-api.onrender.com/recipes/${slug}`, {
         headers: { Authorization: `Bearer ${cookie.token}` },
       });
       navigate("/");
@@ -54,7 +54,7 @@ const RecipePage: React.FC = () => {
   const handleFavoriteRecipe = async () => {
     try {
       await axios.post(
-        `http://localhost:3000/recipes/${data.slug}/favorite`,
+        `https://recipie-api.onrender.com/recipes/${data.slug}/favorite`,
         null,
         {
           headers: { Authorization: `Bearer ${cookie.token}` },
@@ -70,7 +70,7 @@ const RecipePage: React.FC = () => {
   const handleRemoveFromFavoritesRecipe = async () => {
     try {
       await axios.delete(
-        `http://localhost:3000/recipes/${data.slug}/favorite`,
+        `https://recipie-api.onrender.com/recipes/${data.slug}/favorite`,
         {
           headers: { Authorization: `Bearer ${cookie.token}` },
         }

@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
-import profileAvatar from "../../public/account-avatar-profile-user-11-svgrepo-com.svg";
 import RecipeCard from "@/components/RecipeCard";
 import { Recipe } from "@/types/RecipeInterface";
 import { jwtDecode } from "jwt-decode";
@@ -34,30 +33,20 @@ const UserProfile = () => {
   const [usernameEdit, setUsernameEdit] = useState("");
   const [bioEdit, setBioEdit] = useState("");
   const [email, setEmail] = useState("");
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<File | undefined>(undefined);
 
   const decodedToken: DecodedToken | null = cookies.token
     ? jwtDecode(cookies.token)
     : null;
 
-  const cachedDataString = localStorage.getItem("recipes");
-  let cachedData;
-
-  if (cachedDataString) {
-    cachedData = JSON.parse(cachedDataString);
-  } else {
-    console.log("No data in local storage");
-  }
+  const url = `https://recipie-api.onrender.com/users/${username}`;
 
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const response = await axios.get(
-        `http://localhost:3000/users/${username}`,
-        {
-          headers: { Authorization: `Bearer ${cookies.token}` },
-        }
-      );
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${cookies.token}` },
+      });
       return response.data;
     },
   });
@@ -105,8 +94,11 @@ const UserProfile = () => {
       window.location.reload();
       await refetch();
     } catch (error) {
-      console.log(error);
-      const errorMessages = error.response.data.message;
+      let errorMessages;
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        errorMessages = error.response?.data.message;
+      }
 
       if (Array.isArray(errorMessages)) {
         toast({
@@ -191,7 +183,9 @@ const UserProfile = () => {
                         file:bg-violet-50 file:text-violet-700
                         hover:file:bg-violet-100"
                           type="file"
-                          onChange={(e) => setFile(e.target.files[0])}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            e.target.files && setFile(e.target.files[0])
+                          }
                         />
                       </div>
                     </div>
