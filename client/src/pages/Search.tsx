@@ -58,7 +58,11 @@ const Search = () => {
           )}
 
           {searchResults.recipes?.length === 0 &&
-            searchResults.tags?.length === 0 && <p>No results found.</p>}
+            searchResults.tags?.length === 0 && (
+              <p className="w-full text-center text-2xl mt-1">
+                No results found.
+              </p>
+            )}
         </div>
       </div>
     </>
