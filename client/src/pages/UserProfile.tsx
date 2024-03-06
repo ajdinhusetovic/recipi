@@ -35,10 +35,6 @@ const UserProfile = () => {
   const [email, setEmail] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);
 
-  const decodedToken: DecodedToken | null = cookies.token
-    ? jwtDecode(cookies.token)
-    : null;
-
   const url = `https://recipie-api.onrender.com/users/${username}`;
 
   const { isLoading, error, data, refetch } = useQuery({
@@ -59,7 +55,12 @@ const UserProfile = () => {
     return <p>Error fetching data: {error.message}</p>;
   }
 
-  const isSameUser = decodedToken && decodedToken.username === data.username;
+  let decodedToken: DecodedToken | null;
+  let isSameUser;
+  if (cookies.token) {
+    decodedToken = cookies.token ? jwtDecode(cookies.token) : null;
+    isSameUser = decodedToken && decodedToken.username === data.username;
+  }
 
   const handleUserUpdate = async () => {
     const formData = new FormData();

@@ -6,23 +6,12 @@ import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 
 const Recipes = () => {
-  // const cachedDataString = localStorage.getItem("recipes");
-  // let cachedData;
-
-  // if (cachedDataString) {
-  //   cachedData = JSON.parse(cachedDataString);
-  // } else {
-  //   console.log("No data in local storage");
-  // }
-
   const fetchRecipeData = async () => {
     try {
       const response = await axios.get(
         "https://recipie-api.onrender.com/recipes"
       );
       const recipes = response.data.recipes;
-
-      // localStorage.setItem("recipes", JSON.stringify(recipes));
 
       return recipes;
     } catch (error) {
