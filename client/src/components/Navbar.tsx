@@ -60,7 +60,10 @@ const Navbar = () => {
           {nav ? (
             ""
           ) : (
-            <h1 className="items-self-center text-5xl">
+            <h1
+              className="items-self-center text-5xl cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               Reci<span className="text-yellow-600 font-medium">pi</span>
             </h1>
           )}
