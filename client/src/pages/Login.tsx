@@ -8,7 +8,7 @@ import { useCookies } from "react-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
-  const setCookie = useCookies(["token"])[1];
+  const setCookie = useCookies()[1];
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
