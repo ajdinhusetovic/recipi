@@ -32,7 +32,10 @@ const Search = () => {
               className="border rounded p-1 md:w-1/2"
               onChange={(e) => setSearch(e.target.value)}
             />
-            <Button onClick={handleSearch} className="font-medium">
+            <Button
+              onClick={handleSearch}
+              className="font-medium bg-violet-500 hover:bg-violet-600"
+            >
               Search
             </Button>
           </div>
