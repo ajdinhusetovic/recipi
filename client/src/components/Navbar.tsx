@@ -27,7 +27,10 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const decodedToken = jwtDecode(cookie.token) as JwtPayload;
+  let decodedToken;
+  if (cookie.token) {
+    decodedToken = jwtDecode(cookie.token) as JwtPayload;
+  }
 
   console.log(decodedToken);
 
@@ -114,7 +117,7 @@ const Navbar = () => {
                 <li className="group transition-all duration-300 ease-in-out">
                   <Link
                     className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
-                    to={`/users/${decodedToken.username}/`}
+                    to={`/users/${decodedToken?.username}/`}
                   >
                     My Profile
                   </Link>
@@ -174,7 +177,7 @@ const Navbar = () => {
               <li className="group transition-all duration-300 ease-in-out">
                 <Link
                   className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
-                  to={`/users/${decodedToken.username}/`}
+                  to={`/users/${decodedToken?.username}/`}
                 >
                   My Profile
                 </Link>
