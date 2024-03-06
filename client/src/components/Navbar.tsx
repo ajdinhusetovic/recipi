@@ -59,38 +59,100 @@ const Navbar = () => {
           </div>
         </div>
         {nav && (
-          <ul className="md:hidden w-full h-screen flex flex-col items-center justify-center">
-            <li>
-              <Link to="/">Home</Link>
+          <ul className="md:hidden w-full h-screen flex flex-col items-center justify-center gap-2">
+            <li className="group transition-all duration-300 ease-in-out">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-300 ease-out"
+                to="/"
+              >
+                Home
+              </Link>
             </li>
-            <li>Link 2</li>
-            <li>
-              <Link to="/recipes/create-recipe">Add Recipe</Link>
+            <li className="group transition-all duration-300 ease-in-out">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                to="/recipes/search"
+              >
+                Search
+              </Link>
             </li>
-            <li>Link 4</li>
-            <li>Link 5</li>
+            <li className="group transition-all duration-300 ease-in-out">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                to="/recipes/create-recipe/"
+              >
+                Add Recipe
+              </Link>
+            </li>
+            {cookie.token ? (
+              <button onClick={handleLogout}>Logout</button>
+            ) : (
+              <>
+                <li className="group transition-all duration-300 ease-in-out">
+                  <Link
+                    className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                    to="/login"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li className="group transition-all duration-300 ease-in-out">
+                  <Link
+                    className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                    to="/register"
+                  >
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         )}
 
         <ul className="hidden md:flex items-center gap-5">
-          <li>
-            <Link to="/">Home</Link>
+          <li className="group transition-all duration-300 ease-in-out">
+            <Link
+              className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-300 ease-out"
+              to="/"
+            >
+              Home
+            </Link>
           </li>
-          <li>
-            <Link to="/recipes/search">Search</Link>
+          <li className="group transition-all duration-300 ease-in-out">
+            <Link
+              className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+              to="/recipes/search"
+            >
+              Search
+            </Link>
           </li>
-          <li>
-            <Link to="/recipes/create-recipe/">Add Recipe</Link>
+          <li className="group transition-all duration-300 ease-in-out">
+            <Link
+              className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+              to="/recipes/create-recipe/"
+            >
+              Add Recipe
+            </Link>
           </li>
           {cookie.token ? (
             <button onClick={handleLogout}>Logout</button>
           ) : (
             <>
-              <li>
-                <Link to="/login">Login</Link>
+              <li className="group transition-all duration-300 ease-in-out">
+                <Link
+                  className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                  to="/login"
+                >
+                  Login
+                </Link>
               </li>
-              <li>
-                <Link to="/register">Register</Link>
+              <li className="group transition-all duration-300 ease-in-out">
+                <Link
+                  className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                  to="/register"
+                >
+                  Register
+                </Link>
               </li>
             </>
           )}
