@@ -48,7 +48,13 @@ const Navbar = () => {
             nav ? "" : "w-full md:w-1/3"
           }`}
         >
-          {nav ? "" : <h1 className="items-self-center text-4xl">LOGO</h1>}
+          {nav ? (
+            ""
+          ) : (
+            <h1 className="items-self-center text-5xl">
+              Reci<span className="text-yellow-600 font-medium">pie</span>
+            </h1>
+          )}
           <div
             className={`md:hidden flex justify-end p-2 ${
               nav && "fixed top-0 right-0"

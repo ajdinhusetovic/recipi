@@ -50,6 +50,37 @@ const RecipePage: React.FC = () => {
     }
   };
 
+  const handleFavoriteRecipe = async () => {
+    try {
+      await axios.post(
+        `http://localhost:3000/recipes/${data.slug}/favorite`,
+        null,
+        {
+          headers: { Authorization: `Bearer ${cookie.token}` },
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveFromFavoritesRecipe = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/recipes/${data.slug}/favorite`,
+        {
+          headers: { Authorization: `Bearer ${cookie.token}` },
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const isRecipeFavorited = data.favorited;
+
   return (
     <>
       <Navbar />
@@ -86,6 +117,25 @@ const RecipePage: React.FC = () => {
                 >
                   Delete
                 </button>
+                {isRecipeFavorited ? (
+                  <button
+                    onClick={handleRemoveFromFavoritesRecipe}
+                    className={`${
+                      isSameUser ? "hidden" : ""
+                    } bg-violet-50 mb-3 mt-1 rounded text-violet-500 p-2 hover:bg-violet-100`}
+                  >
+                    Unsave recipe
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleFavoriteRecipe}
+                    className={`${
+                      isSameUser ? "hidden" : ""
+                    }  bg-violet-50 mb-3 mt-1 rounded text-violet-500 p-2 hover:bg-violet-100`}
+                  >
+                    Save recipe
+                  </button>
+                )}
               </div>
             </div>
             <img
