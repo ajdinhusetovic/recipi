@@ -87,7 +87,7 @@ const RecipePage: React.FC = () => {
       <div className="w-full">
         <div className="md:w-8/12 md:my-0 md:mx-auto flex flex-col">
           <div className="lg:w-7/12 flex flex-col">
-            <div className="w-11/12 mx-auto ">
+            <div className="w-11/12 mx-auto md:mx-0 ">
               <h1 className="md:mx-0 text-3xl md:text-4xl lg:text-5xl font-medium my-6">
                 {data.name}
               </h1>
@@ -142,7 +142,7 @@ const RecipePage: React.FC = () => {
               src={data.image}
               alt=""
               width={700}
-              className="float-left justify-self-start w-11/12 mx-auto"
+              className="float-left justify-self-start w-11/12 mx-auto md:mx-0"
             />
             <div className="w-11/12 mx-auto md:w-full mt-4">
               <p className="text-lg">{data.description}</p>
