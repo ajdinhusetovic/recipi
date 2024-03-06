@@ -61,7 +61,7 @@ const Navbar = () => {
             ""
           ) : (
             <h1 className="items-self-center text-5xl">
-              Reci<span className="text-yellow-600 font-medium">pie</span>
+              Reci<span className="text-yellow-600 font-medium">pi</span>
             </h1>
           )}
           <div
