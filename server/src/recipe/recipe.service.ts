@@ -187,6 +187,7 @@ export class RecipeService {
     if (isNotFavorited) {
       user.favorites.push(recipe);
       recipe.favoritesCount++;
+      recipe.favorited = true;
 
       await this.userRepository.save(user);
       await this.recipeRepository.save(recipe);
@@ -204,6 +205,7 @@ export class RecipeService {
     if (recipeIndex >= 0) {
       user.favorites.splice(recipeIndex, 1);
       recipe.favoritesCount--;
+      recipe.favorited = false;
 
       await this.userRepository.save(user);
       await this.recipeRepository.save(recipe);

@@ -37,6 +37,9 @@ export class RecipeEntity {
   @Column({ default: 0 })
   favoritesCount: number;
 
+  @Column({ default: false })
+  favorited: boolean;
+
   @Column({ default: '' })
   image: string;
 
