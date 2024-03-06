@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
 import { useCookies } from "react-cookie";
+import { BiLogOut } from "react-icons/bi";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -91,7 +92,7 @@ const Navbar = () => {
               </Link>
             </li>
             {cookie.token ? (
-              <button onClick={handleLogout}>Logout</button>
+              <BiLogOut onClick={handleLogout} />
             ) : (
               <>
                 <li className="group transition-all duration-300 ease-in-out">
@@ -141,7 +142,11 @@ const Navbar = () => {
             </Link>
           </li>
           {cookie.token ? (
-            <button onClick={handleLogout}>Logout</button>
+            <BiLogOut
+              onClick={handleLogout}
+              size={30}
+              className="cursor-pointer"
+            />
           ) : (
             <>
               <li className="group transition-all duration-300 ease-in-out">
