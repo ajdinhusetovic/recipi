@@ -31,7 +31,6 @@ const Register = () => {
         const errorMessages = error.response.data.message;
 
         if (Array.isArray(errorMessages)) {
-          // Handle array of error messages
           toast({
             title:
               errorMessages[0] ||
@@ -39,7 +38,6 @@ const Register = () => {
             variant: "fail",
           });
         } else if (typeof errorMessages === "string") {
-          // Handle single error message
           toast({
             title:
               errorMessages || "There has been an error creating your account",
@@ -57,19 +55,19 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-screen h-screen">
+    <div className="flex flex-col xl:flex-row h-screen">
       <div className="w-full h-1/4 xl:w-2/5 xl:h-full bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 flex items-center justify-center xl:block xl:p-10">
-        <h1 className="text-3xl md:text-4xl text-center xl:text-left xl:text-7xl font-semibold xl:mt-24">
+        <h1 className="text-2xl md:text-4xl text-center xl:text-left xl:text-7xl font-semibold xl:mt-24">
           Saving and browsing for recipes has never been easier.
         </h1>
       </div>
-      <div className="mt-10 md:mt-0 w-full h-full xl:w-3/5 xl:h-full flex flex-col items-center md:justify-center xl:p-10">
+      <div className="mt-5 md:mt-0 w-full h-full xl:w-3/5 xl:h-full flex flex-col items-center md:justify-center xl:p-10">
         <h1 className="text-3xl md:text-4xl font-medium xl:text-5xl text-center xl:p-14">
           Create your Recipie account.
         </h1>
         <form
           onSubmit={handleRegister}
-          className="flex flex-col gap-3 items-center mt-8 xl:mt-0"
+          className="flex flex-col gap-2 items-center mt-4 xl:mt-0"
         >
           <InputComponent
             type="text"
@@ -86,7 +84,7 @@ const Register = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <a href="/" className="underline text-red-500 text-sm">
+          <a href="/" className="underline text-violet-500 text-sm">
             Continue without account
           </a>
           <div className="flex items-center justify-center gap-3 w-11/12 md:w-full mb-12">
