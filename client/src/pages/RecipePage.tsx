@@ -105,7 +105,7 @@ const RecipePage: React.FC = () => {
                   onClick={() => navigate(`/recipes/edit/${data.slug}`)}
                   className={`${
                     isSameUser ? "" : "hidden"
-                  } w-[100px] bg-violet-50 mb-3 mt-1 rounded text-violet-500`}
+                  } w-[100px] bg-violet-50 mb-3 mt-1 rounded p-2 text-violet-500 hover:bg-violet-100`}
                 >
                   Edit
                 </button>
@@ -113,7 +113,7 @@ const RecipePage: React.FC = () => {
                   onClick={deleteRecipe}
                   className={`${
                     isSameUser ? "" : "hidden"
-                  } w-[100px] bg-violet-50 mb-3 mt-1 rounded text-violet-500`}
+                  } w-[100px] bg-violet-50 mb-3 mt-1 rounded p-2 text-violet-500 hover:bg-violet-100`}
                 >
                   Delete
                 </button>

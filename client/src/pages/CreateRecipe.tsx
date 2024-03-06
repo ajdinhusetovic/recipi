@@ -3,10 +3,11 @@ import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CreateRecipe = ({ mode }) => {
   const MAX_CHAR_LENGTH = 50;
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { slug } = useParams();
 
@@ -51,10 +52,7 @@ const CreateRecipe = ({ mode }) => {
 
         console.log("FETCHED RECIPE FROM SLUG:", data);
 
-        // Set state with the fetched data
-        setFetchedSlug(data.slug); // Store the fetched slug in state
-
-        // Set state with the fetched data
+        setFetchedSlug(data.slug);
         setRecipeName(data.name);
         setRecipeDescription(data.description);
         setPrepTime(data.prepTime);
@@ -68,7 +66,6 @@ const CreateRecipe = ({ mode }) => {
       }
     };
 
-    // Only fetch data in edit mode and when a slug is provided
     if (mode === "edit" && slug) {
       fetchData();
     }
@@ -134,6 +131,16 @@ const CreateRecipe = ({ mode }) => {
         variant: "fail",
       });
     }
+  };
+
+  const deleteTag = (index: number) => {
+    const updatedTags = [...tags];
+    if (updatedTags.length === 1) {
+      toast({ title: "Recipe must have at least one tag", variant: "fail" });
+      return;
+    }
+    updatedTags.splice(index, 1);
+    setTags(updatedTags);
   };
 
   console.log("INGREDIENTS:", ingredients);
@@ -209,7 +216,7 @@ const CreateRecipe = ({ mode }) => {
       console.log("After submission - fetchedSlug:", fetchedSlug);
     } finally {
       setLoading(false);
-      console.log(loading);
+      navigate("/");
     }
   };
 
@@ -217,8 +224,12 @@ const CreateRecipe = ({ mode }) => {
     <>
       <Navbar />
       <p className="flex text-lg flex-wrap w-11/12 mx-auto mt-4">
-        {tags.map((tag) => (
-          <span className="bg-violet-50 ml-2 p-[6px] rounded text-center inline-block">
+        {tags.map((tag, index) => (
+          <span
+            key={index}
+            className="bg-violet-50 ml-2 p-[6px] rounded text-center inline-block cursor-pointer text-violet-500"
+            onClick={() => deleteTag(index)}
+          >
             {tag}
           </span>
         ))}
