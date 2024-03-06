@@ -59,14 +59,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col xl:flex-row h-screen">
-      <div className="w-full h-1/4 xl:w-2/5 xl:h-full bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 flex items-center justify-center xl:block xl:p-10">
+    <div className="flex flex-col xl:flex-row h-screen bg-violet-500 xl:bg-white">
+      <div className="hidden w-full h-1/4 xl:w-2/5 xl:h-full bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 xl:block xl:p-10">
         <h1 className="text-2xl md:text-4xl text-center xl:text-left xl:text-7xl font-semibold xl:mt-24">
           Saving and browsing for recipes has never been easier.
         </h1>
       </div>
-      <div className="mt-10 md:mt-0 w-full h-full xl:w-3/5 xl:h-full flex flex-col items-center md:justify-center xl:p-10">
-        <h1 className="text-3xl md:text-4xl font-medium xl:text-5xl text-center xl:p-14">
+      <div className="mt-10 md:mt-0 w-full h-full xl:w-3/5 xl:h-full flex flex-col items-center justify-center xl:p-10">
+        <h1 className="text-3xl md:text-4xl font-medium xl:text-5xl text-center xl:p-14 text-violet-50 xl:text-dark-text">
           Log In To Your Recipie Account.
         </h1>
         <form
@@ -83,7 +83,10 @@ const Login = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <a href="/" className="underline text-violet-500 text-sm">
+          <a
+            href="/"
+            className="underline text-violet-50 xl:text-violet-500 font-medium text-sm"
+          >
             Continue without account
           </a>
           <div className="flex items-center justify-center gap-3 w-11/12 md:w-full">
@@ -91,7 +94,7 @@ const Login = () => {
               onClick={() => navigate("/register")}
               size="lg"
               variant="secondary"
-              className="text-1xl mt-4 text-dark-text w-1/2"
+              className="text-1xl mt-4 text-violet-500 w-1/2 bg-violet-50"
             >
               Create my account
             </Button>
@@ -99,7 +102,7 @@ const Login = () => {
               type="submit"
               size="lg"
               variant="secondary"
-              className="text-1xl mt-4 text-dark-text w-1/2"
+              className="text-1xl mt-4 text-violet-500 w-1/2 bg-violet-50"
             >
               Log In
             </Button>

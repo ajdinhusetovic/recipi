@@ -12,8 +12,10 @@ const InputComponent: React.FC<InputComponentProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex flex-col text-dark-text">
-      <label className=" p-1">{label}</label>
+    <div className="flex flex-col">
+      <label className="text-violet-50 xl:text-dark-text font-medium p-1">
+        {label}
+      </label>
       <input
         type={type}
         onChange={onChange}
