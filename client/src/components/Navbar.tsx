@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { BiLogOut } from "react-icons/bi";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -16,6 +17,12 @@ const Navbar = () => {
       body.style.overflow = nav ? "auto" : "hidden";
     }
   };
+
+  const navigate = useNavigate();
+
+  const decodedToken = cookie.token ? jwtDecode(cookie.token) : null;
+
+  console.log(decodedToken);
 
   useEffect(() => {
     const body = document.querySelector("body");
@@ -38,6 +45,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     removeCookie("token");
+    navigate("/");
     window.location.reload();
   };
 
@@ -142,11 +150,21 @@ const Navbar = () => {
             </Link>
           </li>
           {cookie.token ? (
-            <BiLogOut
-              onClick={handleLogout}
-              size={30}
-              className="cursor-pointer"
-            />
+            <>
+              <li className="group transition-all duration-300 ease-in-out">
+                <Link
+                  className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                  to={`/users/${decodedToken.username}/`}
+                >
+                  My Profile
+                </Link>
+              </li>
+              <BiLogOut
+                onClick={handleLogout}
+                size={30}
+                className="cursor-pointer"
+              />
+            </>
           ) : (
             <>
               <li className="group transition-all duration-300 ease-in-out">
