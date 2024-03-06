@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Navbar from "@/components/Navbar";
 import { useToast } from "@/components/ui/use-toast";
 import { RecipeStep } from "@/types/StepInterface";
@@ -17,7 +16,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
   const { toast } = useToast();
   const { slug } = useParams();
 
-  const [cookie, setCookies] = useCookies();
+  const [cookie] = useCookies();
 
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");

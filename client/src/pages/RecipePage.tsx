@@ -2,17 +2,17 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { StepInterface } from "@/types/StepInterface";
 import RecipeCard from "@/components/RecipeCard";
 import Navbar from "@/components/Navbar";
 import { Recipe } from "@/types/RecipeInterface";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "@/components/ui/use-toast";
+import { RecipeStep } from "@/types/StepInterface";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [cookie, setCookies] = useCookies();
+  const [cookie] = useCookies();
 
   const navigate = useNavigate();
 
@@ -161,7 +161,7 @@ const RecipePage: React.FC = () => {
             </div>
             <div className="p-3 md:p-0  my-5">
               <h1 className="text-3xl font-medium py-3">How do I make it?</h1>
-              {data.steps.map((step: StepInterface) => (
+              {data.steps.map((step: RecipeStep) => (
                 <div key={step.stepNumber} className="py-2">
                   <h2 className="text-2xl font-medium">
                     Step {step.stepNumber}

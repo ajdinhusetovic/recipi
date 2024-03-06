@@ -14,8 +14,8 @@ declare module "jwt-decode" {
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cookie, setCookies, removeCookie] = useCookies();
+
+  const [cookie, removeCookie] = useCookies(["token"]);
 
   const handleNav = () => {
     setNav(!nav);
@@ -51,7 +51,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    removeCookie("token");
+    removeCookie("token", null);
     navigate("/");
     window.location.reload();
   };

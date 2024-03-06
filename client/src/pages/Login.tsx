@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import axios from "axios";
 import InputComponent from "@/components/InputComponent";
@@ -9,7 +8,7 @@ import { useCookies } from "react-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(["token"]);
+  const setCookie = useCookies(["token"])[1];
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
