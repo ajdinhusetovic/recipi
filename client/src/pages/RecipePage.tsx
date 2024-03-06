@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import { Recipe } from "@/types/RecipeInterface";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "@/components/ui/use-toast";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -61,6 +62,7 @@ const RecipePage: React.FC = () => {
       );
       window.location.reload();
     } catch (error) {
+      toast({ title: "You must be logged in to save recipe", variant: "fail" });
       console.log(error);
     }
   };
