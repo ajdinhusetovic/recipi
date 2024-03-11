@@ -11,7 +11,6 @@ interface CreateRecipeProps {
 }
 
 const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
-  const MAX_CHAR_LENGTH = 50;
   const navigate = useNavigate();
   const { toast } = useToast();
   const { slug } = useParams();
@@ -77,11 +76,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
   }, [mode, slug, cookie.token]);
 
   const handleIngredientInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length <= MAX_CHAR_LENGTH) {
-      setIngredient(e.target.value);
-    } else {
-      console.log("ERROR");
-    }
+    setIngredient(e.target.value);
   };
 
   const addIngredient = () => {
