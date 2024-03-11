@@ -79,12 +79,16 @@ const UserProfile = () => {
     }
 
     try {
-      const response = await axios.patch(url, formData, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.patch(
+        `https://recipie-api.onrender.com/users/user`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       const newToken = response.data.user.token;
       setCookie("token", newToken, { path: "/" });
       navigate(`/users/${usernameEdit || data.username}`);
