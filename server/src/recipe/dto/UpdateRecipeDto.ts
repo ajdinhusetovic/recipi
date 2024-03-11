@@ -4,8 +4,10 @@ export class UpdateRecipeDto {
   readonly tags: string[];
   readonly steps: string[];
   readonly videoLink: string;
-  readonly recipeArea: string;
+  readonly difficulty: string;
+  readonly servings: number;
   readonly image: string;
   readonly description: string;
   readonly cookTime: number;
+  readonly prepTime: number;
 }

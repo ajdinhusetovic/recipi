@@ -5,15 +5,16 @@ export class CreateRecipeDto {
   readonly name: string;
 
   @IsNotEmpty()
-  readonly instructions: string;
-
-  @IsNotEmpty()
   readonly tags: string[];
 
   @IsNotEmpty()
   readonly steps: string[];
 
+  readonly description: string;
+  readonly difficulty: string;
+  readonly prepTime: number;
+  readonly cookTime: number;
   readonly videoLink: string;
-  readonly recipeArea: string;
+  readonly servings: number;
   readonly image: string;
 }

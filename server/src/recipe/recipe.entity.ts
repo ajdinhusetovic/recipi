@@ -44,6 +44,9 @@ export class RecipeEntity {
   @Column()
   cookTime: number;
 
+  @Column()
+  servings: number;
+
   @Column({ default: 0 })
   favoritesCount: number;
 
