@@ -10,8 +10,21 @@ import { CookiesProvider } from "react-cookie";
 import UserProfile from "./pages/UserProfile";
 import CreateRecipe from "./pages/CreateRecipe";
 import Search from "./pages/Search";
+import axios from "axios";
 
 const queryClient = new QueryClient();
+
+const pingApi = async () => {
+  const apiUrl = "https://recipie-api.onrender.com";
+
+  try {
+    await axios.get(apiUrl);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+setInterval(pingApi, 14 * 60 * 1000);
 
 function App() {
   return (
