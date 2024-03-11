@@ -10,6 +10,7 @@ import { AuthMiddleware } from './user/middleware/auth.middleware';
 import { RecipeModule } from './recipe/recipe.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduledJobService } from './scheduled-job.service';
+import { ApiService } from './api.service';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { ScheduledJobService } from './scheduled-job.service';
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService, ScheduledJobService],
+  providers: [AppService, ApiService, ScheduledJobService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
