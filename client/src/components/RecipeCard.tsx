@@ -33,7 +33,16 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
     >
       <img src={recipe.image} alt="" className="w-full h-1/2" />
       <div className="w-11/12 h-1/2 my-0 mx-auto">
-        <p className="my-2">{recipeTime} mins</p>
+        <div className="flex">
+          <p className="my-2">{recipeTime} mins</p>
+          <div
+            className={`${difficultyColor} w-16 md:w-[100px] rounded mt-2 ml-3`}
+          >
+            <p className="font-medium text-sm md:text-lg text-center">
+              {recipe.difficulty}
+            </p>
+          </div>
+        </div>
         <ul className="flex gap-2 mt-1 md:mt-3 flex-wrap">
           {recipe.tags.map((tag: string, index: number) => (
             <li key={index} className="bg-violet-50 p-1 rounded">
@@ -43,11 +52,6 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
             </li>
           ))}
         </ul>
-        <div className={`${difficultyColor} w-16 md:w-[100px] rounded mt-2`}>
-          <p className="font-medium text-sm md:text-lg text-center">
-            {recipe.difficulty}
-          </p>
-        </div>
         <h1 className="text-[20px] md:text-2xl mt-2 md:mt-3">
           {truncatedTitle}
         </h1>

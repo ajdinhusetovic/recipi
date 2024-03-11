@@ -19,6 +19,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
 
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
+  const [servings, setServings] = useState(0);
 
   const [prepTime, setPrepTime] = useState(0);
   const [cookTime, setCookTime] = useState(0);
@@ -65,6 +66,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
         setIngredients(data.ingredients);
         setInstructions(data.steps.map((step: RecipeStep) => step.instruction));
         setTags(data.tags);
+        setServings(data.servings);
       } catch (error) {
         console.error("Error fetching recipe data", error);
       }
@@ -133,6 +135,16 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
     }
   };
 
+  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length <= 15) {
+      setIngredient(e.target.value);
+    } else {
+      toast({ title: "Tag too long", variant: "fail" });
+      return;
+    }
+    setTag(e.target.value);
+  };
+
   const deleteTag = (index: number) => {
     const updatedTags = [...tags];
     if (updatedTags.length === 1) {
@@ -175,7 +187,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
     formData.append("prepTime", prepTime.toString());
     formData.append("cookTime", cookTime.toString());
     formData.append("difficulty", recipeDifficulty);
-    formData.append("instructions[]", "osman");
+    formData.append("servings", servings.toString());
     ingredients.forEach((ingredient, index) => {
       formData.append(`ingredients[${index}]`, ingredient);
     });
@@ -361,13 +373,23 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
             )}
           </div>
           <div>
+            <div className="flex gap-2 mb-8 items-center">
+              <label className="text-lg">Servings</label>
+              <input
+                type="number"
+                className="border rounded w-1/2 p-1 md:p-2"
+                onChange={(e) => setServings(parseInt(e.target.value))}
+                value={servings}
+                min="0"
+              />
+            </div>
             <div className="flex gap-2 items-center">
-              <label>Tags</label>
+              <label className="text-lg">Tags</label>
               <input
                 type="text"
                 className="border rounded w-1/2 p-1"
                 value={tag}
-                onChange={(e) => setTag(e.target.value)}
+                onChange={(e) => handleTagChange(e)}
               />
               <button
                 className="bg-violet-50 p-1 rounded w-[50px]"
