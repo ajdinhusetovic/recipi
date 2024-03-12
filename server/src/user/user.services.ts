@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -55,37 +55,29 @@ export class UserService {
   }
 
   async deleteCurrentUser(currentUserId: number) {
-    // Find the user
-    const user = await this.userRepository.findOne({
-      where: { id: currentUserId },
-      relations: ['recipes', 'favorites'],
-    });
+    const user = await this.userRepository.findOne({ where: { id: currentUserId }, relations: ['recipes'] });
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    // Delete related recipes and steps
     await Promise.all(
       user.recipes.map(async (recipe) => {
-        // Delete related steps
-        await this.stepRepository.delete({ id: recipe.id });
-        // Delete the recipe itself
+        await this.stepRepository.delete({ recipe: { id: recipe.id } });
+      }),
+    );
+
+    // Delete related recipes
+    await Promise.all(
+      user.recipes.map(async (recipe) => {
         await this.recipeRepository.delete(recipe.id);
       }),
     );
 
-    // Delete related favorites
-    await Promise.all(
-      user.favorites.map(async (favorite) => {
-        await this.recipeRepository.createQueryBuilder().relation(UserEntity, 'favorites').of(user).remove(favorite);
-      }),
-    );
+    console.log(user);
 
-    // Finally, delete the user
-    await this.userRepository.delete({ id: currentUserId });
-
-    return 'User deleted successfully';
+    // Delete the user
+    await this.userRepository.remove(user);
   }
 
   async logInUser(logUserInDto: LogUserInDto): Promise<UserEntity> {
