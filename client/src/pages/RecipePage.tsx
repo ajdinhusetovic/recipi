@@ -169,6 +169,9 @@ const RecipePage: React.FC = () => {
               <p className="text-lg">
                 <span className="font-medium">Total:</span> {totalTime} mins
               </p>
+              <p className="text-lg">
+                <span className="font-medium">Servings:</span> {data.servings}
+              </p>
             </div>
             <div className="my-5">
               <h1 className="text-3xl font-medium py-3">Ingredients</h1>
