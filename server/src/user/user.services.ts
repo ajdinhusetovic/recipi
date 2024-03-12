@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -10,13 +10,16 @@ import { LogUserInDto } from './dto/LogUserInDto';
 import { compare } from 'bcrypt';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { RecipeEntity } from 'src/recipe/recipe.entity';
+import { StepEntity } from 'src/step/step.entity';
 
 @Injectable()
 export class UserService {
   private readonly s3Client = new S3Client({ region: process.env.AWS_S3_REGION });
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(RecipeEntity) private readonly recipeRepository: Repository<RecipeEntity>,
+    @InjectRepository(StepEntity) private readonly stepRepository: Repository<StepEntity>,
   ) {}
 
   async createUser(createUserDto: CreateUserDto, fileName?: string, file?: Buffer): Promise<UserEntity> {
@@ -52,13 +55,37 @@ export class UserService {
   }
 
   async deleteCurrentUser(currentUserId: number) {
-    const user = await this.userRepository.findOne({ where: { id: currentUserId } });
+    // Find the user
+    const user = await this.userRepository.findOne({
+      where: { id: currentUserId },
+      relations: ['recipes', 'favorites'],
+    });
 
     if (!user) {
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    return await this.userRepository.delete({ id: currentUserId });
+    // Delete related recipes and steps
+    await Promise.all(
+      user.recipes.map(async (recipe) => {
+        // Delete related steps
+        await this.stepRepository.delete({ id: recipe.id });
+        // Delete the recipe itself
+        await this.recipeRepository.delete(recipe.id);
+      }),
+    );
+
+    // Delete related favorites
+    await Promise.all(
+      user.favorites.map(async (favorite) => {
+        await this.recipeRepository.createQueryBuilder().relation(UserEntity, 'favorites').of(user).remove(favorite);
+      }),
+    );
+
+    // Finally, delete the user
+    await this.userRepository.delete({ id: currentUserId });
+
+    return 'User deleted successfully';
   }
 
   async logInUser(logUserInDto: LogUserInDto): Promise<UserEntity> {

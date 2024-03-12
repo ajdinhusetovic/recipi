@@ -22,10 +22,10 @@ export class UserEntity {
   @Column({ default: '' })
   image: string;
 
-  @OneToMany(() => RecipeEntity, (recipe) => recipe.user)
+  @OneToMany(() => RecipeEntity, (recipe) => recipe.user, { cascade: true })
   recipes: RecipeEntity[];
 
-  @ManyToMany(() => RecipeEntity)
+  @ManyToMany(() => RecipeEntity, { cascade: true })
   @JoinTable()
   favorites: RecipeEntity[];
 
