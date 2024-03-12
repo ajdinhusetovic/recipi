@@ -11,6 +11,7 @@ import UserProfile from "./pages/UserProfile";
 import CreateRecipe from "./pages/CreateRecipe";
 import Search from "./pages/Search";
 import axios from "axios";
+import SavedRecipes from "./pages/SavedRecipes";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ function App() {
                 element={<CreateRecipe mode="edit" />}
               />
               <Route path="/recipes/search" element={<Search />} />
+              <Route path="/recipes/saved" element={<SavedRecipes />} />
             </Routes>
           </Router>
           <Toaster />

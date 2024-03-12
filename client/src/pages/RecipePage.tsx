@@ -173,7 +173,7 @@ const RecipePage: React.FC = () => {
                 <span className="font-medium">Servings:</span> {data.servings}
               </p>
             </div>
-            <div className="my-5">
+            <div className="p-3 my-5 md:p-0">
               <h1 className="text-3xl font-medium py-3">Ingredients</h1>
               <ul>
                 {data.ingredients.map((ingredient: string, index: number) => (
@@ -186,7 +186,7 @@ const RecipePage: React.FC = () => {
             <div className="p-3 md:p-0  my-5">
               <h1 className="text-3xl font-medium py-3">How do I make it?</h1>
               {data.steps.map((step: RecipeStep) => (
-                <div key={step.stepNumber} className="py-2">
+                <div key={step.stepNumber} className="p-2">
                   <h2 className="text-2xl font-medium">
                     Step {step.stepNumber}
                   </h2>

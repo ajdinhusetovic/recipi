@@ -17,6 +17,17 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import Navbar from "@/components/Navbar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface DecodedToken {
   username: string;
@@ -117,6 +128,16 @@ const UserProfile = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      await axios.delete("https://recipie-api.onrender.com/users/user", {
+        headers: { Authorization: `Bearer ${cookies.token}` },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -131,71 +152,97 @@ const UserProfile = () => {
               {data.bio}
             </p>
             {isSameUser && (
-              <Dialog>
-                <DialogTrigger>
-                  <Button className="mt-4">Edit profile</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
-                    <DialogDescription>
-                      Click Save Changes to finish updating your profile.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex flex-col w-full">
-                    <div className="flex flex-col">
-                      <label>Username</label>
-                      <input
-                        type="text"
-                        onChange={(e) => setUsernameEdit(e.target.value)}
-                        className="border outline-none p-1 rounded"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="border outline-none p-1 rounded"
-                      />
-                    </div>
-                    <div className="flex flex-col mt-4">
-                      <label>
-                        Bio
-                        <span className="text-sm ml-1 text-gray-500">
-                          (Max 200 characters)
-                        </span>
-                      </label>
-                      <textarea
-                        onChange={(e) => setBioEdit(e.target.value)}
-                        className="border outline-none p-1 rounded resize-none"
-                        rows={6}
-                      />
-                      <div className="mt-3">
-                        <label>Profile picture</label>
+              <div className="flex gap-2">
+                <Dialog>
+                  <DialogTrigger>
+                    <Button className="mt-4">Edit profile</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Edit profile</DialogTitle>
+                      <DialogDescription>
+                        Click Save Changes to finish updating your profile.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex flex-col w-full">
+                      <div className="flex flex-col">
+                        <label>Username</label>
                         <input
-                          className="mt-1 block w-full text-sm text-slate-500
+                          type="text"
+                          onChange={(e) => setUsernameEdit(e.target.value)}
+                          className="border outline-none p-1 rounded"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="border outline-none p-1 rounded"
+                        />
+                      </div>
+                      <div className="flex flex-col mt-4">
+                        <label>
+                          Bio
+                          <span className="text-sm ml-1 text-gray-500">
+                            (Max 200 characters)
+                          </span>
+                        </label>
+                        <textarea
+                          onChange={(e) => setBioEdit(e.target.value)}
+                          className="border outline-none p-1 rounded resize-none"
+                          rows={6}
+                        />
+                        <div className="mt-3">
+                          <label>Profile picture</label>
+                          <input
+                            className="mt-1 block w-full text-sm text-slate-500
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
                         file:bg-violet-50 file:text-violet-700
                         hover:file:bg-violet-100"
-                          type="file"
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            e.target.files && setFile(e.target.files[0])
-                          }
-                        />
+                            type="file"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              e.target.files && setFile(e.target.files[0])
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <Button
-                    className="w-1/2 float-right"
-                    onClick={handleUserUpdate}
-                  >
-                    Save Changes
-                  </Button>
-                </DialogContent>
-              </Dialog>
+                    <Button
+                      className="w-1/2 float-right"
+                      onClick={handleUserUpdate}
+                    >
+                      Save Changes
+                    </Button>
+                  </DialogContent>
+                </Dialog>
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button variant="destructive" className="mt-4">
+                      Delete profile
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your Recipi account.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDeleteAccount}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             )}
             <p className="text-lg mt-8 mb-3">
               Recipes created: {data.recipes.length}

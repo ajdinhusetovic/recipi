@@ -112,6 +112,14 @@ const Navbar = () => {
                 Add Recipe
               </Link>
             </li>
+            <li className="group transition-all duration-300 ease-in-out">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                to="/recipes/saved/"
+              >
+                Saved
+              </Link>
+            </li>
             {cookie.token ? (
               <>
                 <li className="group transition-all duration-300 ease-in-out">
@@ -170,6 +178,14 @@ const Navbar = () => {
               to="/recipes/create-recipe/"
             >
               Add Recipe
+            </Link>
+          </li>
+          <li className="group transition-all duration-300 ease-in-out">
+            <Link
+              className="bg-left-bottom bg-gradient-to-r from-violet-500 to-violet-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+              to="/recipes/saved/"
+            >
+              Saved
             </Link>
           </li>
           {cookie.token ? (

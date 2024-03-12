@@ -137,7 +137,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
 
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 15) {
-      setIngredient(e.target.value);
+      setTag(e.target.value);
     } else {
       toast({ title: "Tag too long", variant: "fail" });
       return;
@@ -154,9 +154,6 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
     updatedTags.splice(index, 1);
     setTags(updatedTags);
   };
-
-  console.log("INGREDIENTS:", ingredients);
-  console.log("STEPS:", instructions);
 
   const submitRecipe = async () => {
     console.log("Before submission - fetchedSlug:", fetchedSlug);
@@ -239,6 +236,9 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
   return (
     <>
       <Navbar />
+      <p className="mt-3 w-11/12 mx-auto text-gray-500">
+        *To remove tags or ingredients just click on them!
+      </p>
       <p className="flex text-lg flex-wrap w-11/12 mx-auto mt-4">
         {tags.map((tag, index) => (
           <span
