@@ -1,23 +1,28 @@
 import Navbar from "@/components/Navbar";
 import RecipeCard from "@/components/RecipeCard";
+import { Recipe } from "@/types/RecipeInterface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useCookies } from "react-cookie";
 
+interface DecodedToken {
+  username: string;
+}
+
 const SavedRecipes = () => {
   const [cookies] = useCookies();
 
-  let decoded;
+  let decoded: DecodedToken | undefined;
   if (cookies.token) {
     decoded = jwtDecode(cookies.token);
   }
 
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const response = await axios.get(
-        `https://recipie-api.onrender.com/users/${decoded.username}`,
+        `https://recipie-api.onrender.com/users/${decoded?.username}`,
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
         }
@@ -64,7 +69,7 @@ const SavedRecipes = () => {
           <div className="w-11/12 mx-auto flex flex-col items-center justify-center my-12 md:flex-row md:justify-start md:items-start">
             {data &&
               data.favorites &&
-              data.favorites.map((recipe) => (
+              data.favorites.map((recipe: Recipe) => (
                 <RecipeCard recipe={recipe} key={recipe.id} />
               ))}
           </div>
