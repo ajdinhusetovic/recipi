@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import RecipeCard from "@/components/RecipeCard";
 import { Recipe } from "@/types/RecipeInterface";
@@ -37,7 +36,6 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
   const { username } = useParams();
-  const [cookies, setCookie] = useCookies();
 
   const { toast } = useToast();
 
@@ -104,7 +102,8 @@ const UserProfile = () => {
         }
       );
       const newToken = response.data.user.token;
-      setCookie("token", newToken, { path: "/" });
+      localStorage.removeItem("token");
+      localStorage.setItem("token", newToken);
       navigate(`/users/${usernameEdit || data.username}`);
       window.location.reload();
       await refetch();
