@@ -5,26 +5,30 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Recipe } from "@/types/RecipeInterface";
 
-interface SearchResults {
-  recipes?: Recipe[];
-  tags?: Recipe[];
-}
-
 const Search = () => {
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchResults>();
+  const [searchResults, setSearchResults] = useState<Recipe[]>([]);
 
   const handleSearch = async () => {
     try {
       const response = await axios.get(
         `https://recipie-api.onrender.com/recipes/search?query=${search}`
       );
-      console.log(response.data);
-      setSearchResults(response.data);
+      console.log("response", response.data);
+      const combinedArray = [...response.data.recipes, ...response.data.tags];
+
+      const uniqueResults = Array.from(
+        new Set(combinedArray.map((item) => item.slug))
+      ).map((slug) => {
+        return combinedArray.find((item) => item.slug === slug);
+      });
+      setSearchResults(uniqueResults);
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log("seach results", searchResults);
 
   return (
     <>
@@ -46,30 +50,11 @@ const Search = () => {
             </Button>
           </div>
         </div>
-        <div className="md:w-10/12 lg:w-11/12 mx-auto flex flex-col items-center justify-center md:items-baseline md:justify-normal mt-8">
-          {searchResults?.recipes?.length &&
-            Array.isArray(searchResults.recipes) && (
-              <div className="flex flex-col md:flex-row md:flex-wrap gap-8">
-                {searchResults.recipes.map((recipe) => (
-                  <RecipeCard key={recipe.id} recipe={recipe} />
-                ))}
-              </div>
-            )}
-
-          {searchResults?.tags?.length && Array.isArray(searchResults.tags) && (
-            <div className="flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-center lg:items-baseline lg:justify-normal  gap-8">
-              {searchResults.tags.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
-              ))}
-            </div>
-          )}
-
-          {searchResults?.recipes?.length === 0 &&
-            searchResults.tags?.length === 0 && (
-              <p className="w-full text-center text-2xl mt-1">
-                No results found.
-              </p>
-            )}
+        <div className="md:w-10/12 lg:w-11/12 mx-auto flex flex-col items-center justify-center md:items-baseline md:justify-normal mt-12">
+          {searchResults.length > 0 &&
+            searchResults.map((recipe, index: number) => (
+              <RecipeCard recipe={recipe} key={index} />
+            ))}
         </div>
       </div>
     </>
