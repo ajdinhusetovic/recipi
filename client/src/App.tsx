@@ -13,7 +13,9 @@ import Search from "./pages/Search";
 import axios from "axios";
 import SavedRecipes from "./pages/SavedRecipes";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 const pingApi = async () => {
   const apiUrl = "https://recipie-api.onrender.com";

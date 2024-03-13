@@ -76,9 +76,11 @@ const SavedRecipes = () => {
         </>
       ) : (
         <>
-          <h1 className="text-3xl mt-8 w-11/12 mx-auto md:text-4xl">
-            Please log in to save recipes.
-          </h1>
+          <div className="bg-violet-500 p-4 w-9/12 lg:w-6/12 mx-auto mt-32 flex items-center justify-center rounded-md">
+            <h1 className="text-3xl p-6 w-11/12 mx-auto md:text-4xl text-violet-50 text-center font-medium">
+              Please log in to save and view saved recipes.
+            </h1>
+          </div>
         </>
       )}
     </>
