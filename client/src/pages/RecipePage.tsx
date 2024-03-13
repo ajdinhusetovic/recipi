@@ -5,14 +5,12 @@ import axios from "axios";
 import RecipeCard from "@/components/RecipeCard";
 import Navbar from "@/components/Navbar";
 import { Recipe } from "@/types/RecipeInterface";
-import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "@/components/ui/use-toast";
 import { RecipeStep } from "@/types/StepInterface";
 
 const RecipePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [cookie] = useCookies();
 
   const navigate = useNavigate();
 
