@@ -34,13 +34,18 @@ const RecipePage: React.FC = () => {
     return <p>Error fetching data: {error.message}</p>;
   }
 
+  const isRecipeFavorited = data.favorited;
+
+  console.log("Recipe favorited", isRecipeFavorited);
+
   let decodedToken;
   let isSameUser;
-  if (cookie.token) {
-    decodedToken = cookie.token ? jwtDecode(cookie.token) : null;
 
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    decodedToken = jwtDecode(token);
     isSameUser = decodedToken && decodedToken.username === data.user.username;
-    console.log(isSameUser);
   }
 
   console.log(data);
@@ -48,7 +53,7 @@ const RecipePage: React.FC = () => {
   const deleteRecipe = async () => {
     try {
       await axios.delete(`https://recipie-api.onrender.com/recipes/${slug}`, {
-        headers: { Authorization: `Bearer ${cookie.token}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       navigate("/");
     } catch (error) {
@@ -64,7 +69,7 @@ const RecipePage: React.FC = () => {
         `https://recipie-api.onrender.com/recipes/${data.slug}/favorite`,
         null,
         {
-          headers: { Authorization: `Bearer ${cookie.token}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
       window.location.reload();
@@ -79,7 +84,7 @@ const RecipePage: React.FC = () => {
       await axios.delete(
         `https://recipie-api.onrender.com/recipes/${data.slug}/favorite`,
         {
-          headers: { Authorization: `Bearer ${cookie.token}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
       window.location.reload();
@@ -87,8 +92,6 @@ const RecipePage: React.FC = () => {
       console.log(error);
     }
   };
-
-  const isRecipeFavorited = data.favorited;
 
   return (
     <>

@@ -67,16 +67,12 @@ export class UserService {
       }),
     );
 
-    // Delete related recipes
     await Promise.all(
       user.recipes.map(async (recipe) => {
         await this.recipeRepository.delete(recipe.id);
       }),
     );
 
-    console.log(user);
-
-    // Delete the user
     await this.userRepository.remove(user);
   }
 

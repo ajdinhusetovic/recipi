@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
 
-  // const testUrl = "http://localhost:3000/users/register";
   const url = "https://recipie-api.onrender.com/users/register";
 
   const [username, setUsername] = useState<string>("");

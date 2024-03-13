@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
-import { useCookies } from "react-cookie";
 import { BiLogOut } from "react-icons/bi";
-import { JwtPayload, jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 declare module "jwt-decode" {
   interface JwtPayload {
@@ -14,8 +13,6 @@ declare module "jwt-decode" {
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
-
-  const [cookie, removeCookie] = useCookies(["token"]);
 
   const handleNav = () => {
     setNav(!nav);
@@ -28,8 +25,11 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   let decodedToken;
-  if (cookie.token) {
-    decodedToken = jwtDecode(cookie.token) as JwtPayload;
+
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    decodedToken = jwtDecode(token);
   }
 
   console.log(decodedToken);
@@ -54,9 +54,9 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    removeCookie("token", null);
-    navigate("/");
+    localStorage.removeItem("token");
     window.location.reload();
+    navigate("/");
   };
 
   return (
@@ -120,7 +120,7 @@ const Navbar = () => {
                 Saved
               </Link>
             </li>
-            {cookie.token ? (
+            {localStorage.getItem("token") ? (
               <>
                 <li className="group transition-all duration-300 ease-in-out">
                   <Link
@@ -188,7 +188,7 @@ const Navbar = () => {
               Saved
             </Link>
           </li>
-          {cookie.token ? (
+          {localStorage.getItem("token") ? (
             <>
               <li className="group transition-all duration-300 ease-in-out">
                 <Link

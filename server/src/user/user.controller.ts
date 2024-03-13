@@ -4,11 +4,13 @@ import {
   Delete,
   FileTypeValidator,
   Get,
+  HttpStatus,
   Param,
   ParseFilePipe,
   Patch,
   Post,
   Req,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -25,6 +27,7 @@ import { User } from './decorators/user.decorator';
 import { AuthGuard } from './guards/auth.guard';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
 
 @Controller('users')
 export class UserController {

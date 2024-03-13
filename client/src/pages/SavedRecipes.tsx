@@ -4,18 +4,18 @@ import { Recipe } from "@/types/RecipeInterface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useCookies } from "react-cookie";
 
 interface DecodedToken {
   username: string;
 }
 
 const SavedRecipes = () => {
-  const [cookies] = useCookies();
-
   let decoded: DecodedToken | undefined;
-  if (cookies.token) {
-    decoded = jwtDecode(cookies.token);
+
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    decoded = jwtDecode(token);
   }
 
   const { isLoading, data } = useQuery({
@@ -24,7 +24,7 @@ const SavedRecipes = () => {
       const response = await axios.get(
         `https://recipie-api.onrender.com/users/${decoded?.username}`,
         {
-          headers: { Authorization: `Bearer ${cookies.token}` },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       return response.data;

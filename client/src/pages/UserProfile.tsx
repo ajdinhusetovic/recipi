@@ -68,8 +68,11 @@ const UserProfile = () => {
 
   let decodedToken: DecodedToken | null;
   let isSameUser;
-  if (cookies.token) {
-    decodedToken = cookies.token ? jwtDecode(cookies.token) : null;
+
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    decodedToken = jwtDecode(token);
     isSameUser = decodedToken && decodedToken.username === data.username;
   }
 
@@ -131,7 +134,7 @@ const UserProfile = () => {
   const handleDeleteAccount = async () => {
     try {
       await axios.delete("https://recipie-api.onrender.com/users/user", {
-        headers: { Authorization: `Bearer ${cookies.token}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
     } catch (error) {
       console.log(error);

@@ -4,11 +4,10 @@ import InputComponent from "@/components/InputComponent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
-  const setCookie = useCookies()[1];
+  // const setCookie = useCookies()[1];
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -26,10 +25,9 @@ const Login = () => {
           password: password,
         }
       );
-
       console.log(response.data);
       const token = response.data.user.token;
-      setCookie("token", token, { path: "/" });
+      localStorage.setItem("token", token);
 
       toast({ title: "Log in successful", variant: "success" });
       navigate("/");
