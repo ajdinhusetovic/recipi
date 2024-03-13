@@ -52,7 +52,7 @@ const UserProfile = () => {
     queryKey: ["users"],
     queryFn: async () => {
       const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${cookies.token}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       return response.data;
     },
@@ -98,7 +98,7 @@ const UserProfile = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${cookies.token}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data",
           },
         }
