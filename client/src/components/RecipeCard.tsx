@@ -28,15 +28,15 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
 
   return (
     <div
-      className="w-56 h-[320px] md:h-96 md:w-72 border flex flex-col cursor-pointer"
+      className="w-56 h-[350px] md:h-[450px] md:w-72 border flex flex-col cursor-pointer"
       onClick={() => navigate(`/recipes/${recipe.slug}`)}
     >
       <img src={recipe.image} alt="" className="w-full h-1/2" />
       <div className="w-11/12 h-1/2 my-0 mx-auto">
-        <div className="flex">
-          <p className="my-2">{recipeTime} mins</p>
+        <div className="flex items-center my-2">
+          <p className="">{recipeTime} mins</p>
           <div
-            className={`${difficultyColor} w-16 md:w-[100px] rounded mt-2 ml-3`}
+            className={`${difficultyColor} w-16 md:w-[100px] rounded ml-3 flex items-center justify-center`}
           >
             <p className="font-medium text-sm md:text-lg text-center">
               {recipe.difficulty}
