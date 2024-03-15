@@ -4,6 +4,7 @@ import { Recipe } from "@/types/RecipeInterface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import Loading from "@/components/Loading.tsx";
 
 interface DecodedToken {
   username: string;
@@ -25,7 +26,7 @@ const SavedRecipes = () => {
         `https://recipie-api.onrender.com/users/${decoded?.username}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       return response.data;
     },
@@ -34,26 +35,7 @@ const SavedRecipes = () => {
   if (isLoading) {
     return (
       <>
-        <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center bg-black bg-opacity-50 z-50">
-          <svg
-            className="animate-spin "
-            fill="none"
-            height="48"
-            viewBox="0 0 48 48"
-            width="48"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4"
-              stroke="violet"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="4"
-            />
-          </svg>
-          <h1 className="text-violet-50 mt-2">Loading...</h1>
-        </div>
-        ;
+        <Loading loadingText="Loading..." />
       </>
     );
   }

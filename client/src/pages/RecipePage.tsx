@@ -8,8 +8,12 @@ import { Recipe } from "@/types/RecipeInterface";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "@/components/ui/use-toast";
 import { RecipeStep } from "@/types/StepInterface";
+import useTokenExpiration from "@/utils/useTokenExpiration.tsx";
+import Loading from "@/components/Loading.tsx";
 
 const RecipePage: React.FC = () => {
+  useTokenExpiration();
+
   const { slug } = useParams<{ slug: string }>();
 
   const navigate = useNavigate();
@@ -18,18 +22,18 @@ const RecipePage: React.FC = () => {
     queryKey: ["recipes", slug],
     queryFn: async () => {
       const response = await axios.get(
-        `https://recipie-api.onrender.com/recipes/${slug}`
+        `https://recipie-api.onrender.com/recipes/${slug}`,
       );
       return response.data;
     },
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loading loadingText="Loading recipe..." />;
   }
 
   if (error) {
-    return <p>Error fetching data: {error.message}</p>;
+    toast({ title: "Something went wrong", variant: "fail" });
   }
 
   const isRecipeFavorited = data.favorited;
@@ -68,7 +72,7 @@ const RecipePage: React.FC = () => {
         null,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+        },
       );
       window.location.reload();
     } catch (error) {
@@ -83,7 +87,7 @@ const RecipePage: React.FC = () => {
         `https://recipie-api.onrender.com/recipes/${data.slug}/favorite`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+        },
       );
       window.location.reload();
     } catch (error) {

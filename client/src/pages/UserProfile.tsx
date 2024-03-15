@@ -27,12 +27,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import useTokenExpiration from "@/utils/useTokenExpiration.tsx";
+import Loading from "@/components/Loading.tsx";
 
 interface DecodedToken {
   username: string;
 }
 
 const UserProfile = () => {
+  useTokenExpiration();
+
   const navigate = useNavigate();
 
   const { username } = useParams();
@@ -57,7 +61,7 @@ const UserProfile = () => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loading loadingText="Loading user profile..." />;
   }
 
   if (error) {
@@ -99,7 +103,7 @@ const UserProfile = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       const newToken = response.data.user.token;
       localStorage.removeItem("token");

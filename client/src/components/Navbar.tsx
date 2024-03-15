@@ -4,6 +4,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { FaTimes } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
 import { jwtDecode } from "jwt-decode";
+import useTokenExpiration from "@/utils/useTokenExpiration.tsx";
 
 declare module "jwt-decode" {
   interface JwtPayload {
@@ -12,6 +13,8 @@ declare module "jwt-decode" {
 }
 
 const Navbar = () => {
+  useTokenExpiration();
+
   const [nav, setNav] = useState(false);
 
   const handleNav = () => {
@@ -31,8 +34,6 @@ const Navbar = () => {
   if (token) {
     decodedToken = jwtDecode(token);
   }
-
-  console.log(decodedToken);
 
   useEffect(() => {
     const body = document.querySelector("body");

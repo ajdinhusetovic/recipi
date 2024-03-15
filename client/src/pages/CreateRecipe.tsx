@@ -5,6 +5,7 @@ import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
+import Loading from "@/components/Loading.tsx";
 
 interface CreateRecipeProps {
   mode: "create" | "edit";
@@ -50,7 +51,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
 
         const { data } = response;
@@ -209,7 +210,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
       } else if (mode === "edit") {
         response = await axios.put(
@@ -220,7 +221,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
       }
       console.log("Recipe submitted successfully", response?.data);
@@ -424,27 +425,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                 Create recipe
               </button>
             </div>
-            {loading && (
-              <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center bg-black bg-opacity-50 z-50">
-                <svg
-                  className="animate-spin "
-                  fill="none"
-                  height="48"
-                  viewBox="0 0 48 48"
-                  width="48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4"
-                    stroke="violet"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="4"
-                  />
-                </svg>
-                <h1 className="text-violet-50 mt-2">Submitting recipe...</h1>
-              </div>
-            )}
+            {loading && <Loading loadingText="Creating recipe..." />}
           </div>
         </>
       ) : (

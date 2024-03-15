@@ -4,6 +4,7 @@ import InputComponent from "@/components/InputComponent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import Loading from "@/components/Loading.tsx";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Register = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
 
@@ -20,6 +22,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       await axios.post(url, {
         username: username,
         email: email,
@@ -45,17 +48,20 @@ const Register = () => {
             variant: "fail",
           });
         } else {
-          console.error("Unexpected error data format:", errorMessages);
           toast({ title: "An unexpected error occurred", variant: "fail" });
         }
       } else {
-        console.error(error);
         toast({ title: "An error occurred", variant: "fail" });
       }
+    } finally {
+      setIsLoading(false);
+      navigate("/login");
     }
   };
 
-  return (
+  return isLoading ? (
+    <Loading loadingText="Creating account..." />
+  ) : (
     <div className="flex flex-col xl:flex-row h-screen bg-violet-500 xl:bg-white">
       <div className=" hidden w-full h-1/4 xl:w-2/5 xl:h-full bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 items-center justify-center xl:block xl:p-10">
         <h1 className="text-2xl md:text-3xl text-center xl:text-left xl:text-7xl font-semibold xl:mt-24">

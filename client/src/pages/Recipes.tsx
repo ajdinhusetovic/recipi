@@ -4,19 +4,20 @@ import axios from "axios";
 import { Recipe } from "@/types/RecipeInterface";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import { toast } from "@/components/ui/use-toast.ts";
+import Loading from "@/components/Loading.tsx";
 
 const Recipes = () => {
   const fetchRecipeData = async () => {
     try {
       const response = await axios.get(
-        "https://recipie-api.onrender.com/recipes"
+        "https://recipie-api.onrender.com/recipes",
       );
       const recipes = response.data.recipes;
 
       return recipes;
     } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
+      toast({ title: "Something went wrong", variant: "fail" });
     }
   };
 
@@ -29,14 +30,12 @@ const Recipes = () => {
     fetchRecipeData();
   }, []);
 
-  console.log(data);
-
   return (
     <>
       <Navbar />
       <div className="h-screen">
         {isLoading ? (
-          <p>Loading...</p>
+          <Loading loadingText="Loading recipes..." />
         ) : error ? (
           <p>Error fetching data: {error.message}</p>
         ) : (

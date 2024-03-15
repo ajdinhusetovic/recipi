@@ -4,13 +4,14 @@ import InputComponent from "@/components/InputComponent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import Loading from "@/components/Loading.tsx";
 
 const Login = () => {
   const navigate = useNavigate();
-  // const setCookie = useCookies()[1];
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
 
@@ -18,14 +19,14 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const response = await axios.post(
         "https://recipie-api.onrender.com/users/login",
         {
           username: username,
           password: password,
-        }
+        },
       );
-      console.log(response.data);
       const token = response.data.user.token;
       localStorage.setItem("token", token);
 
@@ -56,10 +57,14 @@ const Login = () => {
         console.error(error);
         toast({ title: "An error occurred", variant: "fail" });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return (
+  return isLoading ? (
+    <Loading loadingText="Logging in..." />
+  ) : (
     <div className="flex flex-col xl:flex-row h-screen bg-violet-500 xl:bg-white">
       <div className="hidden w-full h-1/4 xl:w-2/5 xl:h-full bg-gradient-to-l from-orange-500 via-orange-400 to-yellow-300 xl:block xl:p-10">
         <h1 className="text-2xl md:text-4xl text-center xl:text-left xl:text-7xl font-semibold xl:mt-24">
@@ -68,7 +73,7 @@ const Login = () => {
       </div>
       <div className="mt-10 md:mt-0 w-full h-full xl:w-3/5 xl:h-full flex flex-col items-center justify-center xl:p-10">
         <h1 className="text-3xl md:text-4xl font-medium xl:text-5xl text-center xl:p-14 text-violet-50 xl:text-dark-text">
-          Log In To Your Recipie Account.
+          Log In To Your Recipe Account.
         </h1>
         <form
           onSubmit={handleRegister}
