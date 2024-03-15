@@ -105,7 +105,7 @@ export class UserService {
         email: user.email,
       },
       process.env.JWTSECRET,
-      { expiresIn: '1m' },
+      { expiresIn: '24h' },
     );
   }
 
