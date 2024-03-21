@@ -199,7 +199,7 @@ const RecipePage: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="border-2 border-violet-400 rounded p-2 mb-8 md:h-[200px]">
+            <div className="border-2 border-violet-400 rounded p-2 mb-8 md:h-[200px] w-11/12 mx-auto md:w-full md:mx-0">
               <h2 className="text-2xl font-medium pb-1">Notes</h2>
               {data.notes ? (
                 <p className="text-lg">{data.notes}</p>
