@@ -12,6 +12,7 @@ import CreateRecipe from "./pages/CreateRecipe";
 import Search from "./pages/Search";
 import axios from "axios";
 import SavedRecipes from "./pages/SavedRecipes";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -51,6 +52,7 @@ function App() {
               />
               <Route path="/recipes/search" element={<Search />} />
               <Route path="/recipes/saved" element={<SavedRecipes />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
           <Toaster />
