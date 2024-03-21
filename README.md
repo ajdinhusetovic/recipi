@@ -11,7 +11,7 @@
 
 
 ## Introduction
-Recipe is a recipe platform designed for users to share, discover and save recipes created by other users. Users can create accounts, create recipes, view and save other recipes.
+Recipi is a recipe platform designed for users to share, discover and save recipes created by other users. Users can create accounts, create recipes, view and save other recipes.
 
 ## Features
 - User Authentication Using JWTs
