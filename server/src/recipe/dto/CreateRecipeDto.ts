@@ -17,4 +17,5 @@ export class CreateRecipeDto {
   readonly videoLink: string;
   readonly servings: number;
   readonly image: string;
+  readonly notes: string;
 }

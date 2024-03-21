@@ -56,6 +56,9 @@ export class RecipeEntity {
   @Column({ default: '' })
   image: string;
 
+  @Column({ default: '' })
+  notes: string;
+
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
