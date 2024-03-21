@@ -69,6 +69,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
         setInstructions(data.steps.map((step: RecipeStep) => step.instruction));
         setTags(data.tags);
         setServings(data.servings);
+        setRecipeNotes(data.notes);
       } catch (error) {
         console.error("Error fetching recipe data", error);
       }
@@ -264,6 +265,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                   className="border rounded p-1 md:p-2"
                   onChange={(e) => setRecipeName(e.target.value)}
                   value={recipeName}
+                  placeholder="Mac n Cheese"
                 />
               </div>
               <div className="flex flex-col">
@@ -272,6 +274,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                   className="border resize-none h-[150px] p-1"
                   onChange={(e) => setRecipeDescription(e.target.value)}
                   value={recipeDescription}
+                  placeholder="Provide recipe description"
                 ></textarea>
               </div>
               <div className="flex gap-2">
@@ -318,9 +321,10 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                       className="border rounded p-1 md:p-2 w-1/2"
                       value={ingredient}
                       onChange={(e) => handleIngredientInput(e)}
+                      placeholder="1/2 teaspoon ground black pepper"
                     />
                     <button
-                      className="bg-violet-50 ml-4 p-1 rounded w-[50px] inline"
+                      className="bg-violet-50 ml-4 p-2 rounded w-[70px] inline text-violet-500 font-medium hover:bg-violet-100"
                       onClick={addIngredient}
                     >
                       Add
@@ -349,16 +353,17 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                     onChange={(e) => setInstruction(e.target.value)}
                     value={instruction}
                     className="border p-1 resize-none h-[200px]"
+                    placeholder="Provide step by step instructions. Pressing 'Add' creates a step"
                   ></textarea>
                   <div className="flex gap-2">
                     <button
-                      className="bg-violet-50 mt-2 p-1 rounded w-[50px]"
+                      className="bg-violet-50 mt-2 p-2 rounded w-[70px] text-violet-500 font-medium hover:bg-violet-100"
                       onClick={addInstruction}
                     >
                       Add
                     </button>
                     <button
-                      className="bg-violet-50 mt-2 p-1 rounded w-[50px]"
+                      className="bg-violet-50 mt-2 p-2 rounded w-[70px] text-violet-500 font-medium hover:bg-violet-100"
                       onClick={removeLastInstruction}
                     >
                       Undo
@@ -394,12 +399,13 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                   <label className="text-lg">Tags</label>
                   <input
                     type="text"
-                    className="border rounded w-1/2 p-1"
+                    className="border rounded w-1/2 p-2"
                     value={tag}
                     onChange={(e) => handleTagChange(e)}
+                    placeholder="mexican"
                   />
                   <button
-                    className="bg-violet-50 p-1 rounded w-[50px]"
+                    className="bg-violet-50 p-2 rounded w-[70px] inline text-violet-500 font-medium hover:bg-violet-100"
                     onClick={addTag}
                   >
                     Add
@@ -412,6 +418,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                   className="border resize-none h-[150px] p-1"
                   onChange={(e) => setRecipeNotes(e.target.value)}
                   value={recipeNotes}
+                  placeholder="Leave any notes or tips you have for this recipe."
                 ></textarea>
               </div>
               <div>
