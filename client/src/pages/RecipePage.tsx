@@ -108,7 +108,7 @@ const RecipePage: React.FC = () => {
               <p className="mb-3 md:pr-0 text-sm md:text-base">
                 Recipe created by{" "}
                 <span
-                  className="text-red-500 underline cursor-pointer"
+                  className="text-violet-500 underline cursor-pointer"
                   onClick={() => navigate(`/users/${data.user.username}`)}
                 >
                   {data.user.username}
@@ -134,18 +134,18 @@ const RecipePage: React.FC = () => {
                 {isRecipeFavorited ? (
                   <button
                     onClick={handleRemoveFromFavoritesRecipe}
-                    className={`${
-                      isSameUser ? "hidden" : ""
-                    } bg-violet-50 mb-3 mt-1 rounded text-violet-500 p-2 hover:bg-violet-100`}
+                    className={
+                      " bg-violet-50 mb-3 mt-1 rounded text-violet-500 p-2 hover:bg-violet-100"
+                    }
                   >
                     Unsave recipe
                   </button>
                 ) : (
                   <button
                     onClick={handleFavoriteRecipe}
-                    className={`${
-                      isSameUser ? "hidden" : ""
-                    }  bg-violet-50 mb-3 mt-1 rounded text-violet-500 p-2 hover:bg-violet-100`}
+                    className={
+                      " bg-violet-50 mb-3 mt-1 rounded text-violet-500 p-2 hover:bg-violet-100"
+                    }
                   >
                     Save recipe
                   </button>
@@ -199,7 +199,7 @@ const RecipePage: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="border-2 border-violet-400 rounded p-2 mb-8 md:h-[200px] w-11/12 mx-auto md:w-full md:mx-0">
+            <div className="border border-violet-400 rounded p-2 mb-8 md:h-[200px] w-11/12 mx-auto md:w-full md:mx-0 overflow-y-auto">
               <h2 className="text-2xl font-medium pb-1">Notes</h2>
               {data.notes ? (
                 <p className="text-lg">{data.notes}</p>
