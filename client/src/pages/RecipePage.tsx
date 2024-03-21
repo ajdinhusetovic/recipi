@@ -22,7 +22,7 @@ const RecipePage: React.FC = () => {
     queryKey: ["recipes", slug],
     queryFn: async () => {
       const response = await axios.get(
-        `https://recipie-api.onrender.com/recipes/${slug}`,
+        `https://recipie-api.onrender.com/recipes/${slug}`
       );
       return response.data;
     },
@@ -72,7 +72,7 @@ const RecipePage: React.FC = () => {
         null,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        },
+        }
       );
       window.location.reload();
     } catch (error) {
@@ -87,7 +87,7 @@ const RecipePage: React.FC = () => {
         `https://recipie-api.onrender.com/recipes/${data.slug}/favorite`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        },
+        }
       );
       window.location.reload();
     } catch (error) {
@@ -199,6 +199,7 @@ const RecipePage: React.FC = () => {
                 </div>
               ))}
             </div>
+            <div>{data.notes}</div>
           </div>
         </div>
         {data.similarRecipes ? (

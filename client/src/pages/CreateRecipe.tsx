@@ -32,6 +32,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
 
   const [instruction, setInstruction] = useState("");
   const [instructions, setInstructions] = useState<string[]>([]);
+  const [recipeNotes, setRecipeNotes] = useState("");
 
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -51,7 +52,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          },
+          }
         );
 
         const { data } = response;
@@ -186,6 +187,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
     formData.append("cookTime", cookTime.toString());
     formData.append("difficulty", recipeDifficulty);
     formData.append("servings", servings.toString());
+    formData.append("notes", recipeNotes);
     ingredients.forEach((ingredient, index) => {
       formData.append(`ingredients[${index}]`, ingredient);
     });
@@ -210,7 +212,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          },
+          }
         );
       } else if (mode === "edit") {
         response = await axios.put(
@@ -221,7 +223,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          },
+          }
         );
       }
       console.log("Recipe submitted successfully", response?.data);
@@ -403,6 +405,14 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
                     Add
                   </button>
                 </div>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-lg">Notes</label>
+                <textarea
+                  className="border resize-none h-[150px] p-1"
+                  onChange={(e) => setRecipeNotes(e.target.value)}
+                  value={recipeNotes}
+                ></textarea>
               </div>
               <div>
                 <input
