@@ -1,4 +1,4 @@
-# Recipi - Platform where sharing, discovering and managind recipes has never been easier
+# Recipi - Platform where sharing, discovering and managing recipes has never been easier
 
 
 ## Table of Contents
