@@ -28,6 +28,11 @@ const RecipePage: React.FC = () => {
     },
   });
 
+  let ingredients;
+  if (data) {
+    ingredients = JSON.parse(data.ingredients);
+  }
+
   if (isLoading) {
     return <Loading loadingText="Loading recipe..." />;
   }
@@ -161,7 +166,7 @@ const RecipePage: React.FC = () => {
             <div className="w-11/12 mx-auto md:w-full mt-4">
               <p className="text-lg">{data.description}</p>
             </div>
-            <hr className="mt-5 border-violet-500" />
+            <hr className="mt-5 border-violet-500 w-11/12 mx-auto lg:mx-0 lg:w-full" />
             <div className="w-11/12 mx-auto md:w-full mt-4 flex flex-col gap-2">
               <p className="text-lg">
                 <span className="font-medium">Prep Time:</span> {data.prepTime}{" "}
@@ -181,7 +186,7 @@ const RecipePage: React.FC = () => {
             <div className="p-3 my-5 md:p-0">
               <h1 className="text-3xl font-medium py-3">Ingredients</h1>
               <ul>
-                {data.ingredients.map((ingredient: string, index: number) => (
+                {ingredients.map((ingredient: string, index: number) => (
                   <li key={index} className="list-disc ml-8 text-lg py-1">
                     {ingredient}
                   </li>

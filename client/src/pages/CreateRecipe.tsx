@@ -43,6 +43,8 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
 
   const [loading, setLoading] = useState(false);
 
+  console.log(ingredients);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,13 +61,15 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
 
         console.log("FETCHED RECIPE FROM SLUG:", data);
 
+        const ingredients = JSON.parse(data.ingredients);
+
         setFetchedSlug(data.slug);
         setRecipeName(data.name);
         setRecipeDescription(data.description);
         setPrepTime(data.prepTime);
         setCookTime(data.cookTime);
         setRecipeDifficulty(data.difficulty);
-        setIngredients(data.ingredients);
+        setIngredients(ingredients);
         setInstructions(data.steps.map((step: RecipeStep) => step.instruction));
         setTags(data.tags);
         setServings(data.servings);
@@ -160,6 +164,7 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
 
   const submitRecipe = async () => {
     console.log("Before submission - fetchedSlug:", fetchedSlug);
+    console.log("ingredients", ingredients);
 
     if (mode === "create") {
       if (
@@ -189,9 +194,9 @@ const CreateRecipe: React.FC<CreateRecipeProps> = ({ mode }) => {
     formData.append("difficulty", recipeDifficulty);
     formData.append("servings", servings.toString());
     formData.append("notes", recipeNotes);
-    ingredients.forEach((ingredient, index) => {
-      formData.append(`ingredients[${index}]`, ingredient);
-    });
+
+    formData.append("ingredients", JSON.stringify(ingredients));
+
     instructions.forEach((instruction, index) => {
       formData.append(`steps[${index}]`, instruction);
     });

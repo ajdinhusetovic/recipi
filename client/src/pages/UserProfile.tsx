@@ -103,7 +103,7 @@ const UserProfile = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
       const newToken = response.data.user.token;
       localStorage.removeItem("token");
@@ -150,7 +150,11 @@ const UserProfile = () => {
       <div className="w-full mt-8">
         <div className="w-11/12 lg:w-7/12 my-0 mx-auto h-full flex items-center">
           <div className="w-11/12 lg:w-full my-0 mx-auto flex flex-col items-center">
-            <img src={data.image} alt="" width={100} className="rounded-full" />
+            <img
+              src={data.image}
+              alt=""
+              className="rounded-full w-32 h-32 object-contain border-2 border-black"
+            />
             <h1 className="text-4xl md:text-5xl font-medium pt-4">
               {data.username}
             </h1>
