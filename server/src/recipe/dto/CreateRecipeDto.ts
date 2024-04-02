@@ -9,7 +9,7 @@ export class CreateRecipeDto {
 
   @IsNotEmpty()
   readonly steps: string[];
-
+  readonly ingredients: string[];
   readonly description: string;
   readonly difficulty: string;
   readonly prepTime: number;

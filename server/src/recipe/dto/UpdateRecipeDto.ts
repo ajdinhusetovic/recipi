@@ -11,4 +11,5 @@ export class UpdateRecipeDto {
   readonly cookTime: number;
   readonly prepTime: number;
   readonly notes: string;
+  readonly ingredients: string[];
 }
