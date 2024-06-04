@@ -11,7 +11,7 @@ const Recipes = () => {
   const fetchRecipeData = async () => {
     try {
       const response = await axios.get(
-        "https://recipie-api.onrender.com/recipes",
+        "https://recipie-api.onrender.com/recipes"
       );
       const recipes = response.data.recipes;
 
