@@ -31,7 +31,7 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
       className="w-56 h-[350px] md:h-[450px] md:w-72 border flex flex-col cursor-pointer"
       onClick={() => navigate(`/recipes/${recipe.slug}`)}
     >
-      <img src={recipe.image} alt="" className="w-full h-1/2" />
+      <img src={recipe.image} alt="" className="h-1/2 w-full object-contain" />
       <div className="w-11/12 h-1/2 my-0 mx-auto">
         <div className="flex items-center my-2">
           <p className="">{recipeTime} mins</p>
